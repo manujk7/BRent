@@ -1,5 +1,7 @@
 import 'package:brent/extras/constants.dart';
+import 'package:brent/modules/home/view/components/home.dart';
 import 'package:brent/modules/login/controller/loginController.dart';
+import 'package:brent/modules/signUp/view/components/signUpPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,8 +74,7 @@ class LoginPage extends StatelessWidget {
                         SizedBox(
                           height: spacing * 3,
                         ),
-                        customButton(
-                            context, "Submit", green, 0.6, () => LoginPage()),
+                        customButton(context, "Submit", green, 0.6, "/home"),
                         SizedBox(
                           height: spacing * 1,
                         ),

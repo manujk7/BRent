@@ -58,7 +58,8 @@ const textInputDecorationRect = InputDecoration(
   ),*/
 );
 
-Widget inputField(BuildContext context, String hintText, bool obscureText,TextInputType textInputType) {
+Widget inputField(BuildContext context, String hintText, bool obscureText,
+    TextInputType textInputType) {
   return TextField(
     textAlign: TextAlign.center,
     keyboardType: textInputType,
@@ -79,7 +80,7 @@ Widget inputField(BuildContext context, String hintText, bool obscureText,TextIn
 }
 
 Widget customButton(BuildContext context, String title, Color color,
-    double width, Widget Function() route) {
+    double width, String route) {
   return Container(
     width: Get.width * width,
     height: 50.0,
@@ -90,7 +91,8 @@ Widget customButton(BuildContext context, String title, Color color,
     ),
     child: InkWell(
       onTap: () {
-        Get.to(() => route());
+        print(route.toString());
+        Get.toNamed(route);
       },
       child: new Container(
         width: Get.width * 0.4,

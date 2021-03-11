@@ -1,4 +1,5 @@
 import 'package:brent/extras/constants.dart';
+import 'package:brent/modules/home/view/components/home.dart';
 import 'package:brent/modules/login/view/loginPage.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:flutter/material.dart';
@@ -75,11 +76,11 @@ class SignUpPage extends StatelessWidget {
                 height: spacing * 1 / 2,
               ),
               customButton(
-                  context, "Referral Code", green, 0.5, () => LoginPage()),
+                  context, "Referral Code", green, 0.5, "/login"),
               SizedBox(
                 height: spacing * 1 / 2,
               ),
-              customButton(context, "Submit", blue, 0.6, () => LoginPage()),
+              customButton(context, "Submit", blue, 0.6, "/home"),
               SizedBox(
                 height: spacing * 1 / 2,
               ),

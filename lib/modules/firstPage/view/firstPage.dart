@@ -55,9 +55,9 @@ class FirstPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             customButton(
-                                context, "Sign Up", blue, 0.4, () => SignUpPage()),
+                                context, "Sign Up", blue, 0.4, "/signUp"),
                             customButton(
-                                context, "Submit", green, 0.4, () => LoginPage()),
+                                context, "Login", green, 0.4, "/login"),
                           ],
                         ),
                         SizedBox(
