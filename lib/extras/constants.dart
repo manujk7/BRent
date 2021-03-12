@@ -83,6 +83,27 @@ Widget inputField(BuildContext context, String hintText, bool obscureText,
   );
 }
 
+Widget inputFieldNoCurvedBorder(BuildContext context, String hintText, bool obscureText,
+    TextInputType textInputType) {
+  return TextField(
+    textAlign: TextAlign.start,
+    keyboardType: textInputType,
+    obscureText: obscureText,
+    decoration: InputDecoration(
+      hintText: hintText,
+      hintStyle: TextStyle(fontSize: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(0),
+        borderSide: BorderSide(
+          width: 0.5,
+          style: BorderStyle.none,
+        ),
+      ),
+      contentPadding: EdgeInsets.all(16),
+    ),
+  );
+}
+
 Widget customButton(BuildContext context, String title, Color color,
     double width, String route) {
   return Container(

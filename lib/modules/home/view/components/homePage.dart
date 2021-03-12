@@ -32,16 +32,28 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     children: [
                       Flexible(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(12.0),
-                            topRight: Radius.circular(12.0),
-                          ),
-                          child: Image.asset(
-                            dummyPlaneHome,
-                            fit: BoxFit.fitWidth,
-                            width: double.maxFinite,
-                          ),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12.0),
+                                topRight: Radius.circular(12.0),
+                              ),
+                              child: Image.asset(
+                                dummyPlaneHome,
+                                fit: BoxFit.fitWidth,
+                                width: double.maxFinite,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Icon(
+                                Icons.share,
+                                size: 32.0,
+                                color: white,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(
@@ -131,6 +143,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-
 }

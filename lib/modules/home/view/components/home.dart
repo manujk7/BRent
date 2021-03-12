@@ -1,5 +1,7 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/home/view/components/create.dart';
+import 'package:brent/modules/home/view/components/invite.dart';
 import 'package:brent/modules/login/view/loginPage.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:flutter/material.dart';
@@ -118,10 +120,7 @@ class Home extends StatelessWidget {
               child: Obx(
                 () => IndexedStack(
                   index: _controller.selectedIndex.value,
-                  children: [
-                    HomePage(),
-                    LoginPage(),
-                  ],
+                  children: [CreatePage(), HomePage(), InvitePage()],
                 ),
               ),
             ),
@@ -168,25 +167,4 @@ class Home extends StatelessWidget {
       ),
     );
   }
-
-  Widget _offsetPopup() => PopupMenuButton<int>(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            value: 1,
-            child: Text(
-              "Flutter Open",
-              style: TextStyle(color: blue, fontWeight: FontWeight.w700),
-            ),
-          ),
-          PopupMenuItem(
-            value: 2,
-            child: Text(
-              "Flutter Tutorial",
-              style: TextStyle(color: blue, fontWeight: FontWeight.w700),
-            ),
-          ),
-        ],
-        icon: Icon(Icons.library_add),
-        offset: Offset(0, 1000),
-      );
 }
