@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   final _controller = Get.put(LoginController());
   final _controllerSignUp = Get.put(SignUpController());
   final _controllerHome = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -25,14 +26,17 @@ class MyApp extends StatelessWidget {
       //when initial Route is given no need to add home widget for initial start point of app
       //full app route structure
       routes: {
-        '/':(context)=> FirstPage(),
-        '/login':(context)=>LoginPage(),
-        '/signUp':(context)=>SignUpPage(),
-        '/home':(context)=>HomePage()
+        '/': (context) => FirstPage(),
+        '/login': (context) => LoginPage(),
+        '/signUp': (context) => SignUpPage(),
+        '/home': (context) => Home()
       },
       theme: ThemeData(
         primarySwatch: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+          dividerTheme: DividerThemeData(
+              color: Colors.grey                               //  <--- change the divider's color
+          )
       ),
     );
   }

@@ -5,11 +5,15 @@ import 'package:get/get.dart';
 
 const Color blue = Color(0xFF1c2c52);
 const Color green = Color(0xFF35bf73);
+const Color lightGrey = Color(0xFFbdbfc2);
+const Color lightGreen = Color(0xFF90ceb0);
+const Color orange = Colors.orange;
 const Color white = Colors.white;
 const Color grey = Colors.blueGrey;
 const double spacing = 24.0;
 const String logoImage = 'assets/images/logo.png';
-const String dummyPlane = 'assets/images/plane_dummy.jpg';
+const String dummyPlane = 'assets/images/planeDummy.jpg';
+const String dummyPlaneHome = 'assets/images/homePagePlane.jpeg';
 
 const textInputDecorationRect = InputDecoration(
   contentPadding: EdgeInsets.symmetric(
@@ -108,6 +112,55 @@ Widget customButton(BuildContext context, String title, Color color,
           ),
         ),
       ),
+    ),
+  );
+}
+
+Widget homeListView(BuildContext context, int index) {
+  return Container(
+    margin: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+    padding: EdgeInsets.all(2.0),
+    decoration: new BoxDecoration(
+      color: lightGreen,
+      border: new Border.all(color: lightGreen, width: 2.0),
+      borderRadius: new BorderRadius.circular(10.0),
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        new Container(
+          width: 60.0,
+          height: 60.0,
+          decoration: new BoxDecoration(
+            color: const Color(0xff7c94b6),
+            image: new DecorationImage(
+              image: new NetworkImage(
+                  'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+            border: new Border.all(
+              color: white,
+              width: 2.0,
+            ),
+          ),
+        ),
+        Text(
+          "Mr Devanur",
+          style: Theme.of(context).textTheme.headline5.copyWith(
+                color: white,
+              ),
+        ),
+        SizedBox(
+          width: spacing * 3,
+        ),
+        Icon(
+          Icons.check_circle_outline,
+          size: 32.0,
+          color: green,
+        ),
+      ],
     ),
   );
 }
