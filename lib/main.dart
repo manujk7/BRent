@@ -1,12 +1,15 @@
 import 'package:brent/modules/firstPage/view/firstPage.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/view/components/home.dart';
+import 'package:brent/modules/profile/controller/profileController.dart';
+import 'package:brent/modules/profile/view/components/profile.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:brent/modules/signUp/view/components/signUpPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'modules/login/controller/loginController.dart';
 import 'modules/login/view/loginPage.dart';
+import 'modules/other/shareApp.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +19,7 @@ class MyApp extends StatelessWidget {
   final _controller = Get.put(LoginController());
   final _controllerSignUp = Get.put(SignUpController());
   final _controllerHome = Get.put(HomeController());
+  final _controllerProfile = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => FirstPage(),
         '/login': (context) => LoginPage(),
         '/signUp': (context) => SignUpPage(),
-        '/home': (context) => Home()
+        '/home': (context) => Home(),
+        '/profile': (context) => ProfilePage(),
+        '/shareApp': (context) => ShareAppPage()
       },
       theme: ThemeData(
         primarySwatch: Colors.grey,

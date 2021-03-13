@@ -47,10 +47,15 @@ class HomePage extends StatelessWidget {
                             ),
                             Align(
                               alignment: Alignment.topRight,
-                              child: Icon(
-                                Icons.share,
-                                size: 32.0,
-                                color: white,
+                              child: GestureDetector(
+                                onTap: (){
+                                  Get.toNamed("/shareApp");
+                                },
+                                child: Icon(
+                                  Icons.share,
+                                  size: 32.0,
+                                  color: white,
+                                ),
                               ),
                             )
                           ],

@@ -1,6 +1,7 @@
 import 'package:brent/modules/login/view/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 const Color blue = Color(0xFF1c2c52);
@@ -14,6 +15,14 @@ const double spacing = 24.0;
 const String logoImage = 'assets/images/logo.png';
 const String dummyPlane = 'assets/images/planeDummy.jpg';
 const String dummyPlaneHome = 'assets/images/homePagePlane.jpeg';
+
+class Constants {
+  //Function to hide KeyBoard--------------------
+  //---------------------------------------------
+  static hideKeyBoard() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+}
 
 const textInputDecorationRect = InputDecoration(
   contentPadding: EdgeInsets.symmetric(
@@ -65,7 +74,7 @@ const textInputDecorationRect = InputDecoration(
 Widget inputField(BuildContext context, String hintText, bool obscureText,
     TextInputType textInputType) {
   return TextField(
-    textAlign: TextAlign.center,
+    textAlign: TextAlign.start,
     keyboardType: textInputType,
     obscureText: obscureText,
     decoration: InputDecoration(
@@ -78,13 +87,13 @@ Widget inputField(BuildContext context, String hintText, bool obscureText,
           style: BorderStyle.none,
         ),
       ),
-      contentPadding: EdgeInsets.all(16),
+      contentPadding: EdgeInsets.all(20),
     ),
   );
 }
 
-Widget inputFieldNoCurvedBorder(BuildContext context, String hintText, bool obscureText,
-    TextInputType textInputType) {
+Widget inputFieldNoCurvedBorder(BuildContext context, String hintText,
+    bool obscureText, TextInputType textInputType) {
   return TextField(
     textAlign: TextAlign.start,
     keyboardType: textInputType,
