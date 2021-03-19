@@ -18,134 +18,256 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
+      appBar: new AppBar(
+        centerTitle: true,
+        backgroundColor: white,
+        title: new Text(
+          "Edit profile",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(12.0),
-                child: GestureDetector(
-                  onTap: () {
-                    if (_controller.state.value == AppState.free)
-                      _pickImage(Get.context);
-                    else if (_controller.state.value == AppState.cropped)
-                      _clearImage();
-                  },
-                  child: Container(
-                    height: 110.0,
-                    width: 110.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
-                        fit: BoxFit.cover,
-                      ),
-                      border: Border.all(
-                        color: white,
-                        width: 5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(32.0, 12.0, 32.0, 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 12),
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Column(
                   children: [
-                    SizedBox(
-                      height: spacing * 1 / 2,
-                    ),
-                    inputField(context, "Full Name", false, TextInputType.text),
-                    SizedBox(
-                      height: spacing * 1 / 2,
-                    ),
-                    inputField(
-                        context, "Email Id", false, TextInputType.emailAddress),
-                    SizedBox(
-                      height: spacing * 1 / 2,
-                    ),
-                    inputField(
-                        context, "Phone Number", false, TextInputType.phone),
-                    SizedBox(
-                      height: spacing * 1 / 2,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        updatingPassword(context);
-                      },
-                      child: TextField(
-                        enabled: false,
-                        textAlign: TextAlign.start,
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: "Password",
-                          hintStyle: TextStyle(fontSize: 14),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              width: 0.5,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          contentPadding: EdgeInsets.all(20),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: spacing * 1 / 2,
-                    ),
                     Container(
-                      height: 150,
-                      child: TextField(
-                        textAlign: TextAlign.start,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        minLines: null,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          hintText: "Address",
-                          hintStyle: TextStyle(fontSize: 14),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              width: 0.5,
-                              style: BorderStyle.none,
+                      height: 70,
+                    ),
+                    Material(
+                      elevation: 2,
+                      color: white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: 32, left: 16, right: 16, bottom: 12),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(
+                              height: spacing * 2,
                             ),
-                          ),
-                          contentPadding: EdgeInsets.all(20),
+                            Center(
+                              child: Text(
+                                "Stephen Williams",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                            ),
+                            SizedBox(
+                              height: spacing * 2,
+                            ),
+                            Text(
+                              "Email address",
+                              style: TextStyle(color: textGrey, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: spacing * 1 / 2,
+                            ),
+                            inputField(context, "Email address", false,
+                                TextInputType.emailAddress),
+                            SizedBox(
+                              height: spacing,
+                            ),
+                            Text(
+                              "Phone number",
+                              style: TextStyle(color: textGrey, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: spacing * 1 / 2,
+                            ),
+                            inputField(context, "Phone Number", false,
+                                TextInputType.phone),
+                            SizedBox(
+                              height: spacing,
+                            ),
+                            Text(
+                              "Address",
+                              style: TextStyle(color: textGrey, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: spacing * 1 / 2,
+                            ),
+                            inputField(
+                                context, "Address", false, TextInputType.text),
+                            SizedBox(
+                              height: spacing,
+                            ),
+                            Text(
+                              "City",
+                              style: TextStyle(color: textGrey, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: spacing * 1 / 2,
+                            ),
+                            inputField(
+                                context, "City", false, TextInputType.text),
+                            SizedBox(
+                              height: spacing,
+                            ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "State",
+                                        style: TextStyle(
+                                            color: textGrey, fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        height: spacing * 1 / 2,
+                                      ),
+                                      TextField(
+                                        onTap: () {},
+                                        textAlign: TextAlign.start,
+                                        readOnly: true,
+                                        keyboardType: TextInputType.text,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          suffix: InkWell(
+                                            onTap: () {},
+                                            child: Icon(
+                                              Icons.keyboard_arrow_down_sharp,
+                                              color: blue,
+                                            ),
+                                          ),
+                                          hintText: "State",
+                                          hintStyle: TextStyle(fontSize: 16),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            borderSide: BorderSide(
+                                                width: 0.5,
+                                                style: BorderStyle.none,
+                                                color: lightGrey),
+                                          ),
+                                          contentPadding: EdgeInsets.all(18),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: spacing,
+                                ),
+                                Flexible(
+                                  flex: 2,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Zip code",
+                                        style: TextStyle(
+                                            color: textGrey, fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        height: spacing * 1 / 2,
+                                      ),
+                                      inputField(context, "Zip code", false,
+                                          TextInputType.text),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: spacing * 2,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Change password",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    //fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_right,
+                                  color: blue,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: spacing * 2,
+                            ),
+                            Container(
+                              width: Get.width,
+                              height: 56.0,
+                              decoration: new BoxDecoration(
+                                color: blue,
+                                border: new Border.all(color: blue, width: 2.0),
+                                borderRadius: new BorderRadius.circular(6.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  Get.toNamed("/home");
+                                },
+                                child: new Container(
+                                  width: Get.width * 0.4,
+                                  child: new Center(
+                                    child: new Text(
+                                      "Log in",
+                                      style: new TextStyle(
+                                          fontSize: 18.0, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: spacing,
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              customButton(context, "Update", green, 0.6, "/home"),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 12.0, right: 12.0, bottom: 12.0),
-                child: Divider(
-                  color: Colors.black,
-                  thickness: 2.0,
-                ),
-              ),
-            ],
+                Positioned(
+                  top: 15.0,
+                  // (background container size) - (circle height / 2)
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 110.0,
+                      width: 110.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        border: Border.all(
+                          color: white,
+                          width: 5,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

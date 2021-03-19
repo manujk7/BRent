@@ -3,6 +3,7 @@ import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/login/view/loginPage.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'dart:ui' as ui;
 
@@ -13,87 +14,126 @@ class CreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: SingleChildScrollView(
           child: Container(
-            height: Get.height,
-            child: Column(
-              children: <Widget>[
-                Flexible(
-                  child: ClipRRect(
-                    child: Image.asset(
-                      dummyPlaneHome,
-                      fit: BoxFit.fitWidth,
-                      width: double.maxFinite,
+            width: Get.width,
+            margin: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
+            child: Material(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              color: white,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: spacing,
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(12.0),
-                  child: Text(
-                    "One-Way Deal",
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: orange,
+                    Row(
+                      children: [
+                        Obx(
+                          () => FlutterSwitch(
+                            width: 80.0,
+                            height: 45.0,
+                            valueFontSize: 0.0,
+                            toggleSize: 35.0,
+                            value: _controller.isSwitched.value,
+                            borderRadius: 30.0,
+                            showOnOff: true,
+                            onToggle: (val) {
+                              _controller.isSwitched.value = val;
+                            },
+                          ),
                         ),
-                  ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          "One way deal",
+                          style: new TextStyle(
+                              fontSize: 18.0, color: Colors.black),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(
+                        context, "Departing from", false, TextInputType.text),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(context, "Going to", false, TextInputType.text),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(context, "Date", false, TextInputType.datetime),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(context, "Time of departure", false,
+                        TextInputType.text),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(
+                        context, "Time of arrival", false, TextInputType.text),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "15 seats available",
+                          style: new TextStyle(
+                              fontSize: 18.0, color: Colors.black),
+                        ),
+                        Text(
+                          "\$7,500.00 per seat",
+                          style: new TextStyle(
+                              fontSize: 18.0, color: Colors.black),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Container(
+                      width: Get.width,
+                      height: 56.0,
+                      decoration: new BoxDecoration(
+                        color: blue,
+                        border: new Border.all(color: blue, width: 2.0),
+                        borderRadius: new BorderRadius.circular(6.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {},
+                        child: new Container(
+                          width: Get.width * 0.4,
+                          child: new Center(
+                            child: new Text(
+                              "Create flight",
+                              style: new TextStyle(
+                                  fontSize: 18.0, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: spacing * 1 / 2,
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(
-                    context, "From-:", false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(
-                    context, "Going To-:", false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(
-                    context, "Date", false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(
-                    context, "Time of Departure:-", false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(
-                    context, "Time of Arrival:-", false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(
-                    context, "Time of Duration:-", false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(
-                    context, "Available Seat:-", false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                inputFieldNoCurvedBorder(context, "Full fare for 1 seat:-",
-                    false, TextInputType.text),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                customButton(context, "Submit", green, 0.4, "/login"),
-                SizedBox(
-                  height: spacing * 1 / 2,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 24.0, right: 24.0, bottom: 12.0),
-                  child: Divider(
-                    color: Colors.black,
-                    thickness: 2.0,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

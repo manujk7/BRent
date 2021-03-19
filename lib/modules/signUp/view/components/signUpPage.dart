@@ -1,10 +1,7 @@
 import 'package:brent/extras/constants.dart';
-import 'package:brent/modules/home/view/components/home.dart';
-import 'package:brent/modules/login/view/loginPage.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:ui' as ui;
 
 class SignUpPage extends StatelessWidget {
   final SignUpController _controller = Get.find();
@@ -12,87 +9,207 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        title: new Text(
+          "Create an account",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        iconTheme: new IconThemeData(color: blue),
+      ),
+      backgroundColor: background,
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.asset(
-                logoImage,
-                height: 120.0,
+          child: Container(
+            color: background,
+            width: Get.width,
+            margin: EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 16.0),
+            child: Material(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
               ),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              Text(
-                "BRent",
-                style: Theme.of(context).textTheme.headline3.copyWith(
-                      color: blue,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(24.0, 12.0, 12.0, 12.0),
+              color: white,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Create Account",
-                      style: Theme.of(context).textTheme.headline5.copyWith(
-                            color: blue,
-                          ),
+                    Image.asset(
+                      logoImage,
+                      height: 200.0,
                     ),
                     SizedBox(
                       height: spacing * 1 / 2,
+                    ),
+                    SizedBox(
+                      height: spacing,
                     ),
                     inputField(context, "Full Name", false, TextInputType.text),
                     SizedBox(
-                      height: spacing * 1 / 2,
+                      height: spacing,
                     ),
-                    inputField(
-                        context, "Email Id", false, TextInputType.emailAddress),
+                    inputField(context, "Email address", false,
+                        TextInputType.emailAddress),
                     SizedBox(
-                      height: spacing * 1 / 2,
+                      height: spacing,
                     ),
                     inputField(
                         context, "Phone Number", false, TextInputType.phone),
                     SizedBox(
-                      height: spacing * 1 / 2,
+                      height: spacing,
                     ),
-                    inputField(context, "Password", true, TextInputType.text),
+                    Obx(
+                      () => TextField(
+                        textAlign: TextAlign.start,
+                        keyboardType: TextInputType.text,
+                        textAlignVertical: TextAlignVertical.center,
+                        obscureText: _controller.isHidden.value,
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          hintStyle: TextStyle(fontSize: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                                width: 0.5,
+                                style: BorderStyle.none,
+                                color: lightGrey),
+                          ),
+                          contentPadding: EdgeInsets.all(20),
+                          suffix: InkWell(
+                            onTap: _controller.togglePasswordView,
+                            child: Icon(
+                              _controller.isHidden.value
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_rounded,
+                              color: blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Obx(
+                      () => TextField(
+                        textAlign: TextAlign.start,
+                        keyboardType: TextInputType.text,
+                        textAlignVertical: TextAlignVertical.center,
+                        obscureText: _controller.isHiddenConfirm.value,
+                        decoration: InputDecoration(
+                          hintText: "Confirm password",
+                          hintStyle: TextStyle(fontSize: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                                width: 0.5,
+                                style: BorderStyle.none,
+                                color: lightGrey),
+                          ),
+                          contentPadding: EdgeInsets.all(20),
+                          suffix: InkWell(
+                            onTap: _controller.toggleConfirmPasswordView,
+                            child: Icon(
+                              _controller.isHiddenConfirm.value
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_rounded,
+                              color: blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(context, "Address", false, TextInputType.text),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(context, "City", false, TextInputType.text),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 3,
+                          child: TextField(
+                            onTap: () {},
+                            textAlign: TextAlign.start,
+                            readOnly: true,
+                            keyboardType: TextInputType.text,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              suffix: InkWell(
+                                onTap: () {},
+                                child: Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  color: blue,
+                                ),
+                              ),
+                              hintText: "State",
+                              hintStyle: TextStyle(fontSize: 16),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                    width: 0.5,
+                                    style: BorderStyle.none,
+                                    color: lightGrey),
+                              ),
+                              contentPadding: EdgeInsets.all(20),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: spacing,
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child: inputField(
+                              context, "Zip code", false, TextInputType.text),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    inputField(context, "Referral code (optional)", false,
+                        TextInputType.text),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Container(
+                      width: Get.width,
+                      height: 56.0,
+                      decoration: new BoxDecoration(
+                        color: blue,
+                        border: new Border.all(color: blue, width: 2.0),
+                        borderRadius: new BorderRadius.circular(6.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {},
+                        child: new Container(
+                          width: Get.width * 0.4,
+                          child: new Center(
+                            child: new Text(
+                              "Create an account",
+                              style: new TextStyle(
+                                  fontSize: 18.0, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: spacing * 1 / 2,
                     ),
-                    inputField(
-                        context, "Confirm Password", true, TextInputType.text),
                   ],
                 ),
               ),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              customButton(
-                  context, "Referral Code", green, 0.5, "/login"),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              customButton(context, "Submit", blue, 0.6, "/home"),
-              SizedBox(
-                height: spacing * 1 / 2,
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 12.0, right: 12.0, bottom: 12.0),
-                child: Divider(
-                  color: Colors.black,
-                  thickness: 2.0,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

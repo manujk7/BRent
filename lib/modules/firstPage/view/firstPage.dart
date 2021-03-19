@@ -1,8 +1,7 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/login/controller/loginController.dart';
-import 'package:brent/modules/login/view/loginPage.dart';
-import 'package:brent/modules/signUp/view/components/signUpPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class FirstPage extends StatelessWidget {
@@ -11,95 +10,94 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: white,
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: spacing,
-            vertical: spacing,
-          ),
-          width: Get.width,
-          child: Column(
-            children: [
-              Expanded(
-                child: Stack(
-                  alignment: Alignment.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Flexible(
+              flex: 3,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacing,
+                  vertical: spacing,
+                ),
+                width: Get.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Column(
-                      children: [
-                        Image.asset(
-                          logoImage,
-                          height: 120.0,
-                        ),
-                        SizedBox(
-                          height: spacing * 1 / 2,
-                        ),
-                        Text(
-                          "BRent",
-                          style: Theme.of(context).textTheme.headline3.copyWith(
-                                color: blue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        SizedBox(
-                          height: spacing * 1 / 2,
-                        ),
-                        Expanded(
-                          child: Image.asset(
-                            dummyPlane,
-                          ),
-                        ),
-                        SizedBox(
-                          height: spacing * 1 / 2,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            customButton(
-                                context, "Sign Up", blue, 0.4, "/signUp"),
-                            customButton(
-                                context, "Login", green, 0.4, "/login"),
-                          ],
-                        ),
-                        SizedBox(
-                          height: spacing * 1,
-                        ),
-                        Container(
-                          margin:
-                              const EdgeInsets.only(left: 20.0, right: 20.0),
-                          child: Divider(
-                            color: Colors.black,
-                            thickness: 2.0,
-                          ),
-                        ),
-                      ],
+                    Image.asset(
+                      logoImage,
+                      height: 288.0,
                     ),
-                    // Obx(
-                    //   () => Center(
-                    //     child: _controller.isLoggedIn.value
-                    //         ? _controller.showHome.value
-                    //             ? HomeView()
-                    //             : _controller.hasBase.value
-                    //                 ? CurrencyToCompare()
-                    //                 : SelectBase()
-                    //         : InkWell(
-                    //             onTap: () {
-                    //               _controller.googleLogin();
-                    //             },
-                    //             child: Container(
-                    //               width: Get.width * 0.8,
-                    //               color: white,
-                    //               height: 40,
-                    //               alignment: Alignment.center,
-                    //               child: Text("Login Using Google"),
-                    //             ),
-                    //           ),
-                    //   ),
-                    // ),
+                    SizedBox(
+                      height: spacing * 1 / 2,
+                    ),
+                    Center(
+                      child: Text(
+                        "The best in business travel.",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    customButton(context, "Login", blue, 1, "/login"),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Container(
+                      width: Get.width * 1,
+                      height: 56.0,
+                      decoration: new BoxDecoration(
+                        color: white,
+                        border: new Border.all(color: Colors.black, width: 2.0),
+                        borderRadius: new BorderRadius.circular(6.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Get.toNamed("/signUp");
+                        },
+                        child: new Container(
+                          width: Get.width * 0.4,
+                          child: new Center(
+                            child: new Text(
+                              "Create an account",
+                              style: new TextStyle(
+                                  fontSize: 18.0, color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: spacing * 1,
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Positioned.fill(
+                    child: Image.asset(
+                      firstPagePattern,
+                      fit: BoxFit.fill,
+                    ),
+                    bottom: 0,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -38,20 +38,20 @@ class InvitePage extends StatelessWidget {
                       ),
                 ),
               ),
-              Expanded(
-                flex: 4,
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-                  child: ListView.builder(
-                    itemCount: 2,
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    itemBuilder: (BuildContext context, int index) {
-                      return homeListView(context, index);
-                    },
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   flex: 4,
+              //   child: Container(
+              //     margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+              //     child: ListView.builder(
+              //       itemCount: 2,
+              //       shrinkWrap: true,
+              //       controller: _scrollController,
+              //       itemBuilder: (BuildContext context, int index) {
+              //         return homeListView(context, index);
+              //       },
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: spacing * 1 / 2,
               ),

@@ -11,84 +11,113 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        title: new Text(
+          "Log in",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        iconTheme: new IconThemeData(color: blue),
+      ),
+      backgroundColor: background,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: spacing,
-            vertical: spacing,
-          ),
           width: Get.width,
+          margin: EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 16.0),
           child: Column(
             children: [
-              Expanded(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Image.asset(
-                          logoImage,
-                          height: 120.0,
-                        ),
-                        SizedBox(
-                          height: spacing * 1 / 2,
-                        ),
-                        Text(
-                          "BRent",
-                          style: Theme.of(context).textTheme.headline3.copyWith(
-                                color: blue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        SizedBox(
-                          height: spacing,
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(12.0, 24.0, 12.0, 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Login",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    .copyWith(
+              Material(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                color: white,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        logoImage,
+                        height: 200.0,
+                      ),
+                      SizedBox(
+                        height: spacing * 1 / 2,
+                      ),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            inputField(context, "Email address", false,
+                                TextInputType.emailAddress),
+                            SizedBox(
+                              height: spacing,
+                            ),
+                            Obx(
+                              () => TextField(
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.text,
+                                textAlignVertical: TextAlignVertical.center,
+                                obscureText: _controller.isHidden.value,
+                                decoration: InputDecoration(
+                                  hintText: "Password",
+                                  hintStyle: TextStyle(fontSize: 16),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                        width: 0.5,
+                                        style: BorderStyle.none,
+                                        color: lightGrey),
+                                  ),
+                                  contentPadding: EdgeInsets.all(20),
+                                  suffix: InkWell(
+                                    onTap: _controller.togglePasswordView,
+                                    child: Icon(
+                                      _controller.isHidden.value
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_rounded,
                                       color: blue,
                                     ),
+                                  ),
+                                ),
                               ),
-                              SizedBox(
-                                height: spacing,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: spacing * 1,
+                      ),
+                      Container(
+                        width: Get.width,
+                        height: 56.0,
+                        decoration: new BoxDecoration(
+                          color: blue,
+                          border: new Border.all(color: blue, width: 2.0),
+                          borderRadius: new BorderRadius.circular(6.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Get.toNamed("/home");
+                          },
+                          child: new Container(
+                            width: Get.width * 0.4,
+                            child: new Center(
+                              child: new Text(
+                                "Log in",
+                                style: new TextStyle(
+                                    fontSize: 18.0, color: Colors.white),
                               ),
-                              inputField(context, "Email Id", false,
-                                  TextInputType.emailAddress),
-                              SizedBox(
-                                height: spacing,
-                              ),
-                              inputField(context, "Password", true,
-                                  TextInputType.text),
-                            ],
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          height: spacing * 3,
-                        ),
-                        customButton(context, "Submit", green, 0.6, "/home"),
-                        SizedBox(
-                          height: spacing * 1,
-                        ),
-                        Container(
-                          margin:
-                              const EdgeInsets.only(left: 12.0, right: 12.0),
-                          child: Divider(
-                            color: Colors.black,
-                            thickness: 2.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      SizedBox(
+                        height: spacing * 1,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -97,4 +126,6 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+
+
 }

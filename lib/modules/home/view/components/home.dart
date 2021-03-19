@@ -1,173 +1,133 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/view/components/create.dart';
+import 'package:brent/modules/home/view/components/homePage.dart';
 import 'package:brent/modules/home/view/components/invite.dart';
-import 'package:brent/modules/login/view/loginPage.dart';
-import 'package:brent/modules/signUp/controller/signUpController.dart';
+import 'package:brent/modules/home/view/components/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:ui' as ui;
 import 'homePage.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _HomeState();
+  }
+}
+
+class _HomeState extends State<Home> {
   final HomeController _controller = Get.find();
+  var _selectedIndex = 0;
+  String pageTitle = "home";
+
+  /*
+  * On Bottom Navigation item click Listener
+  * */
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      getPageTitle(index);
+      if (index == 1) {
+      } else if (index == 2) {
+      } else if (index == 3) {
+      } else {}
+    });
+  }
+
+  void getPageTitle(int index) {
+    if (index == 0) {
+      pageTitle = "Your upcoming flights";
+    } else if (index == 1) {
+      pageTitle = "Create a new flight";
+    } else if (index == 2) {
+      pageTitle = "Inbox";
+    } else if (index == 3) {
+      pageTitle = "Settings";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
+      appBar: new AppBar(
+        centerTitle: true,
+        backgroundColor: white,
+        title: new Text(
+          pageTitle,
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.all(8.0),
-              color: blue,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  new GestureDetector(
-                    child: Container(
-                      width: 72.0,
-                      height: 72.0,
-                      decoration: new BoxDecoration(
-                        color: const Color(0xff7c94b6),
-                        image: new DecorationImage(
-                          image: new NetworkImage(
-                              'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius:
-                            new BorderRadius.all(new Radius.circular(50.0)),
-                        border: new Border.all(
-                          color: white,
-                          width: 4.0,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Get.toNamed("/profile");
-                    },
-                  ),
-                  Text(
-                    "Mr Devanur",
-                    style: Theme.of(context).textTheme.headline5.copyWith(
-                          color: white,
-                        ),
-                  ),
-                  SizedBox(
-                    width: spacing * 3,
-                  ),
-                  PopupMenuButton(
-                    icon: Icon(
-                      Icons.settings,
-                      size: 32.0,
-                      color: white,
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                    padding: EdgeInsets.all(0.0),
-                    itemBuilder: (context) {
-                      var list = List<PopupMenuEntry<Object>>();
-                      list.add(
-                        PopupMenuDivider(
-                          height: 20,
-                        ),
-                      );
-                      list.add(
-                        PopupMenuItem(
-                          child: Text("Profile"),
-                        ),
-                      );
-                      list.add(
-                        PopupMenuDivider(
-                          height: 20,
-                        ),
-                      );
-                      list.add(
-                        PopupMenuItem(
-                          child: Text("About Us"),
-                        ),
-                      );
-                      list.add(
-                        PopupMenuDivider(
-                          height: 20,
-                        ),
-                      );
-                      list.add(
-                        PopupMenuItem(
-                          child: Text("Share App"),
-                        ),
-                      );
-                      list.add(
-                        PopupMenuDivider(
-                          height: 20,
-                        ),
-                      );
-                      list.add(
-                        PopupMenuItem(
-                          child: Text("Privacy Policy"),
-                        ),
-                      );
-                      list.add(
-                        PopupMenuDivider(
-                          height: 20,
-                        ),
-                      );
-                      return list;
-                    },
-                  ),
-                ],
-              ),
-            ),
             Expanded(
-              child: Obx(
-                () => IndexedStack(
-                  index: _controller.selectedIndex.value,
-                  children: [CreatePage(), HomePage(), InvitePage()],
-                ),
+              child: IndexedStack(
+                index: _selectedIndex,
+                children: [
+                  HomePage(),
+                  CreatePage(),
+                  InvitePage(),
+                  SettingsPage()
+                ],
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.today_outlined,
-              color: white,
-            ),
-            title: Text(
-              'Create',
-              style: TextStyle(color: white, fontSize: 16),
-            ),
+      /*
+          * Bottom Navigation bar of Dashboard
+          * */
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(24), topLeft: Radius.circular(24)),
+          boxShadow: [
+            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24.0),
+            topRight: Radius.circular(24.0),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: white,
-            ),
-            title: Text(
-              'Home',
-              style: TextStyle(color: white, fontSize: 16),
-            ),
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage('assets//icons/home.png')),
+                activeIcon:
+                    ImageIcon(AssetImage('assets/icons/home_selected.png')),
+                title: Text('Home'),
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage('assets/icons/create.png')),
+                activeIcon:
+                    ImageIcon(AssetImage('assets/icons/create_selected.png')),
+                title: Text('Create'),
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage('assets/icons/inbox.png')),
+                title: Text('Inbox'),
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage('assets/icons/settings.png')),
+                activeIcon:
+                    ImageIcon(AssetImage('assets/icons/settings_selected.png')),
+                title: Text('Settings'),
+              ),
+            ],
+
+            currentIndex: _selectedIndex,
+            selectedFontSize: 10,
+            unselectedFontSize: 10,
+            type: BottomNavigationBarType.fixed,
+            // unselectedIconTheme: ColorNames.colorLightGrey,
+            unselectedItemColor: Colors.black,
+            selectedItemColor: blue,
+            onTap: _onItemTapped,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.email,
-              color: white,
-            ),
-            title: Text(
-              'Inbox',
-              style: TextStyle(color: white, fontSize: 16),
-            ),
-          ),
-        ],
-        currentIndex: _controller.selectedIndex.value,
-        onTap: _controller.onItemTapped,
-        backgroundColor: blue,
-        iconSize: 36.0,
+        ),
       ),
     );
   }

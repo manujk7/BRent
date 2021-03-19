@@ -4,17 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-const Color blue = Color(0xFF1c2c52);
+const Color blue = Color(0xFF1FB6FC);
 const Color green = Color(0xFF35bf73);
 const Color lightGrey = Color(0xFFbdbfc2);
 const Color lightGreen = Color(0xFF90ceb0);
-const Color orange = Colors.orange;
+const Color textGrey = Color(0xFF737373);
+const Color orange = Color(0xFFFD7238);
 const Color white = Colors.white;
 const Color grey = Colors.blueGrey;
+const Color background = Color(0xFFF7F7F7);
+const Color borderBg = Color(0xFFDBE2EA);
 const double spacing = 24.0;
 const String logoImage = 'assets/images/logo.png';
+const String firstPagePattern = 'assets/images/firstPagePattern.png';
 const String dummyPlane = 'assets/images/planeDummy.jpg';
-const String dummyPlaneHome = 'assets/images/homePagePlane.jpeg';
+const String dummyPlaneHome = 'assets/images/imagePlane.png';
 
 class Constants {
   //Function to hide KeyBoard--------------------
@@ -79,12 +83,13 @@ Widget inputField(BuildContext context, String hintText, bool obscureText,
     obscureText: obscureText,
     decoration: InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(fontSize: 14),
+      hintStyle: TextStyle(fontSize: 16),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(6),
         borderSide: BorderSide(
-          width: 0.5,
-          style: BorderStyle.none,
+          width: 0.1,
+          style: BorderStyle.solid,
+          color: borderBg,
         ),
       ),
       contentPadding: EdgeInsets.all(20),
@@ -117,11 +122,11 @@ Widget customButton(BuildContext context, String title, Color color,
     double width, String route) {
   return Container(
     width: Get.width * width,
-    height: 50.0,
+    height: 56.0,
     decoration: new BoxDecoration(
       color: blue,
       border: new Border.all(color: color, width: 2.0),
-      borderRadius: new BorderRadius.circular(10.0),
+      borderRadius: new BorderRadius.circular(6.0),
     ),
     child: InkWell(
       onTap: () {
@@ -130,11 +135,6 @@ Widget customButton(BuildContext context, String title, Color color,
       },
       child: new Container(
         width: Get.width * 0.4,
-        decoration: new BoxDecoration(
-          color: color,
-          border: new Border.all(color: white, width: 2.0),
-          borderRadius: new BorderRadius.circular(10.0),
-        ),
         child: new Center(
           child: new Text(
             title,
@@ -148,13 +148,8 @@ Widget customButton(BuildContext context, String title, Color color,
 
 Widget homeListView(BuildContext context, int index) {
   return Container(
-    margin: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
-    padding: EdgeInsets.all(2.0),
-    decoration: new BoxDecoration(
-      color: lightGreen,
-      border: new Border.all(color: lightGreen, width: 2.0),
-      borderRadius: new BorderRadius.circular(10.0),
-    ),
+    padding: EdgeInsets.all(12.0),
+    color: blue,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -172,7 +167,7 @@ Widget homeListView(BuildContext context, int index) {
             borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
             border: new Border.all(
               color: white,
-              width: 2.0,
+              width: 4.0,
             ),
           ),
         ),
@@ -186,9 +181,9 @@ Widget homeListView(BuildContext context, int index) {
           width: spacing * 3,
         ),
         Icon(
-          Icons.check_circle_outline,
-          size: 32.0,
-          color: green,
+          Icons.settings,
+          size: 24.0,
+          color: white,
         ),
       ],
     ),

@@ -1,150 +1,192 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
-import 'package:brent/modules/login/view/loginPage.dart';
-import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:ui' as ui;
 
 class HomePage extends StatelessWidget {
   final HomeController _controller = Get.find();
   final ScrollController _scrollController = new ScrollController();
+  bool expandFlag = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: lightGrey, width: 1),
-                    borderRadius: BorderRadius.circular(12),
+          margin: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
+          child: ListView.builder(
+            itemCount: 12,
+            shrinkWrap: true,
+            controller: _scrollController,
+            itemBuilder: (BuildContext context, int index) {
+              return homeListView(context, index);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget homeListView(BuildContext context, int index) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+      child: Material(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: white, width: 0),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        color: white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0),
+                        bottomLeft: Radius.circular(12.0),
+                        bottomRight: Radius.circular(12.0),
+                      ),
+                      child: Image.asset(
+                        dummyPlaneHome,
+                        fit: BoxFit.fitWidth,
+                        width: double.maxFinite,
+                      ),
+                    ),
                   ),
-                  color: white,
-                  margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-                  child: Column(
+                  SizedBox(
+                    height: spacing * 1 / 2,
+                  ),
+                  Text(
+                    "New York to San Francisco",
+                    style: Theme.of(context).textTheme.headline5.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "One-Way Deal",
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(
+                          color: orange,
+                        ),
+                  ),
+                  SizedBox(
+                    height: spacing,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12.0),
-                                topRight: Radius.circular(12.0),
-                              ),
-                              child: Image.asset(
-                                dummyPlaneHome,
-                                fit: BoxFit.fitWidth,
-                                width: double.maxFinite,
-                              ),
+                      Text(
+                        "03/14/2021 (9:00 a.m.)",
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Colors.black,
                             ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: GestureDetector(
-                                onTap: (){
-                                  Get.toNamed("/shareApp");
-                                },
-                                child: Icon(
-                                  Icons.share,
-                                  size: 32.0,
-                                  color: white,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
                       ),
-                      SizedBox(
-                        height: spacing * 1 / 2,
-                      ),
-                      Center(
-                        child: Text(
-                          "One-Way Deal",
-                          style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                color: orange,
-                              ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Prague",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(
-                                    color: grey,
-                                  ),
+                      Text(
+                        "\$7,500.00 per seat",
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Colors.black,
                             ),
-                            Text(
-                              "Berlin",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(
-                                    color: grey,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Monday Mar 15",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(
-                                    color: grey,
-                                  ),
-                            ),
-                            Text(
-                              "\$5403",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(
-                                    color: grey,
-                                  ),
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-                  child: ListView.builder(
-                    itemCount: 12,
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    itemBuilder: (BuildContext context, int index) {
-                      return homeListView(context, index);
-                    },
+                  SizedBox(
+                    height: spacing,
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      "View Invitees",
+                      style: Theme.of(context).textTheme.headline5.copyWith(
+                            color: blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: spacing,
+                  ),
+                  SizedBox(
+                    height: spacing,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            // ExpandableContainer(
+            //   expanded: expandFlag,
+            //   child: new ListView.builder(
+            //     shrinkWrap: true,
+            //     itemBuilder: (BuildContext context, int index) {
+            //       return new Container(
+            //         child: new ListTile(
+            //           title: new Text(
+            //             "Cool $index",
+            //             style: new TextStyle(
+            //                 fontWeight: FontWeight.bold, color: Colors.black),
+            //           ),
+            //           leading: Container(
+            //             width: 60.0,
+            //             height: 60.0,
+            //             decoration: new BoxDecoration(
+            //               color: const Color(0xff7c94b6),
+            //               image: new DecorationImage(
+            //                 image: new NetworkImage(
+            //                     'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
+            //                 fit: BoxFit.cover,
+            //               ),
+            //               borderRadius:
+            //                   new BorderRadius.all(new Radius.circular(50.0)),
+            //               border: new Border.all(
+            //                 color: white,
+            //                 width: 4.0,
+            //               ),
+            //             ),
+            //           ),
+            //           trailing: SvgPicture.asset('assets/tick.svg'),
+            //         ),
+            //       );
+            //     },
+            //     itemCount: 2,
+            //   ),
+            // ),
+          ],
         ),
+      ),
+    );
+  }
+}
+
+class ExpandableContainer extends StatelessWidget {
+  final bool expanded;
+  final double collapsedHeight;
+  final double expandedHeight;
+  final Widget child;
+
+  ExpandableContainer({
+    @required this.child,
+    this.collapsedHeight = 0.0,
+    this.expandedHeight = 300.0,
+    this.expanded = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    return new AnimatedContainer(
+      duration: new Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      width: screenWidth,
+      height: expanded ? expandedHeight : collapsedHeight,
+      child: new Container(
+        child: child,
       ),
     );
   }

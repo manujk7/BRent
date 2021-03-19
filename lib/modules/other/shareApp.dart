@@ -1,15 +1,8 @@
 import 'package:brent/extras/constants.dart';
-import 'package:brent/modules/home/controller/homeController.dart';
-import 'package:brent/modules/login/view/loginPage.dart';
-import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:ui' as ui;
 
 class ShareAppPage extends StatelessWidget {
-  final HomeController _controller = Get.find();
-  final ScrollController _scrollController = new ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

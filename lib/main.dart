@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: 'Nunito',
           dividerTheme: DividerThemeData(
               color: Colors.grey                               //  <--- change the divider's color
           )
