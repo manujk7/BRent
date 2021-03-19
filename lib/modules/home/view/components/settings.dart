@@ -129,7 +129,9 @@ class SettingsPage extends StatelessWidget {
             if (index == 0) {
               Get.toNamed('/profile');
             } else if (index == 1) {
+
             } else if (index == 2) {
+              Get.toNamed('/shareApp');
             } else if (index == 3) {
             } else {}
           },

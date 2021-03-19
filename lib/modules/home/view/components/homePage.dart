@@ -1,12 +1,12 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   final HomeController _controller = Get.find();
   final ScrollController _scrollController = new ScrollController();
-  bool expandFlag = true;
 
   @override
   Widget build(BuildContext context) {
@@ -101,18 +101,21 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     height: spacing,
                   ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      "View Invitees",
-                      style: Theme.of(context).textTheme.headline5.copyWith(
-                            color: blue,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  GestureDetector(
+                    onTap: () {
+                      _controller
+                          .onLayoutCollapsed(_controller.expandFlag.value);
+                    },
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        "View Invitees",
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                              color: blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: spacing,
                   ),
                   SizedBox(
                     height: spacing,
@@ -120,43 +123,47 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            // ExpandableContainer(
-            //   expanded: expandFlag,
-            //   child: new ListView.builder(
-            //     shrinkWrap: true,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       return new Container(
-            //         child: new ListTile(
-            //           title: new Text(
-            //             "Cool $index",
-            //             style: new TextStyle(
-            //                 fontWeight: FontWeight.bold, color: Colors.black),
-            //           ),
-            //           leading: Container(
-            //             width: 60.0,
-            //             height: 60.0,
-            //             decoration: new BoxDecoration(
-            //               color: const Color(0xff7c94b6),
-            //               image: new DecorationImage(
-            //                 image: new NetworkImage(
-            //                     'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
-            //                 fit: BoxFit.cover,
-            //               ),
-            //               borderRadius:
-            //                   new BorderRadius.all(new Radius.circular(50.0)),
-            //               border: new Border.all(
-            //                 color: white,
-            //                 width: 4.0,
-            //               ),
-            //             ),
-            //           ),
-            //           trailing: SvgPicture.asset('assets/tick.svg'),
-            //         ),
-            //       );
-            //     },
-            //     itemCount: 2,
-            //   ),
-            // ),
+            Obx(
+              () => ExpandableContainer(
+                expanded: _controller.expandFlag.value,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (BuildContext context, int index) {
+                    return new Container(
+                      padding: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
+                      child: new ListTile(
+                        title: new Text(
+                          "Cool $index",
+                          style: new TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                        leading: Container(
+                          width: 60.0,
+                          height: 60.0,
+                          decoration: new BoxDecoration(
+                            color: const Color(0xff7c94b6),
+                            image: new DecorationImage(
+                              image: new NetworkImage(
+                                  'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius:
+                                new BorderRadius.all(new Radius.circular(50.0)),
+                            border: new Border.all(
+                              color: white,
+                              width: 4.0,
+                            ),
+                          ),
+                        ),
+                        trailing: SvgPicture.asset('assets/tick.svg'),
+                      ),
+                    );
+                  },
+                  itemCount: 2,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -173,7 +180,7 @@ class ExpandableContainer extends StatelessWidget {
   ExpandableContainer({
     @required this.child,
     this.collapsedHeight = 0.0,
-    this.expandedHeight = 300.0,
+    this.expandedHeight = 180.0,
     this.expanded = true,
   });
 

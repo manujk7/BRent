@@ -2,6 +2,7 @@ import 'package:brent/modules/firstPage/view/firstPage.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/view/components/home.dart';
 import 'package:brent/modules/profile/controller/profileController.dart';
+import 'package:brent/modules/profile/view/components/password.dart';
 import 'package:brent/modules/profile/view/components/profile.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:brent/modules/signUp/view/components/signUpPage.dart';
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
         '/signUp': (context) => SignUpPage(),
         '/home': (context) => Home(),
         '/profile': (context) => ProfilePage(),
-        '/shareApp': (context) => ShareAppPage()
+        '/shareApp': (context) => ShareAppPage(),
+        '/changePassword': (context) => ChangePassword()
       },
       theme: ThemeData(
         primarySwatch: Colors.grey,

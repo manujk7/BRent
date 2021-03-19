@@ -26,6 +26,7 @@ class ProfilePage extends StatelessWidget {
           "Edit profile",
           style: TextStyle(color: Colors.black),
         ),
+        iconTheme: new IconThemeData(color: blue),
       ),
       body: SafeArea(
         maintainBottomViewPadding: true,
@@ -189,23 +190,29 @@ class ProfilePage extends StatelessWidget {
                             SizedBox(
                               height: spacing * 2,
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Change password",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    //fontWeight: FontWeight.bold,
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/changePassword");
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Change password",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      //fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.keyboard_arrow_right,
-                                  color: blue,
-                                ),
-                              ],
+                                  Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: blue,
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: spacing * 2,
@@ -226,7 +233,7 @@ class ProfilePage extends StatelessWidget {
                                   width: Get.width * 0.4,
                                   child: new Center(
                                     child: new Text(
-                                      "Log in",
+                                      "Save changes",
                                       style: new TextStyle(
                                           fontSize: 18.0, color: Colors.white),
                                     ),
