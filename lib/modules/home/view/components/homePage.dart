@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: background,
       body: SafeArea(
         maintainBottomViewPadding: true,
@@ -30,141 +31,147 @@ class HomePage extends StatelessWidget {
   }
 
   Widget homeListView(BuildContext context, int index) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
-      child: Material(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: white, width: 0),
-          borderRadius: BorderRadius.circular(24),
-        ),
-        color: white,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        topRight: Radius.circular(12.0),
-                        bottomLeft: Radius.circular(12.0),
-                        bottomRight: Radius.circular(12.0),
-                      ),
-                      child: Image.asset(
-                        dummyPlaneHome,
-                        fit: BoxFit.fitWidth,
-                        width: double.maxFinite,
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed('/bookFlightPage');
+      },
+      child: Container(
+        margin: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+        child: Material(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: white, width: 0),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          color: white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0),
+                          bottomLeft: Radius.circular(12.0),
+                          bottomRight: Radius.circular(12.0),
+                        ),
+                        child: Image.asset(
+                          dummyPlaneHome,
+                          fit: BoxFit.fitWidth,
+                          width: double.maxFinite,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: spacing * 1 / 2,
-                  ),
-                  Text(
-                    "New York to San Francisco",
-                    style: Theme.of(context).textTheme.headline5.copyWith(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "One-Way Deal",
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: orange,
-                        ),
-                  ),
-                  SizedBox(
-                    height: spacing,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "03/14/2021 (9:00 a.m.)",
-                        style: Theme.of(context).textTheme.subtitle1.copyWith(
-                              color: Colors.black,
-                            ),
-                      ),
-                      Text(
-                        "\$7,500.00 per seat",
-                        style: Theme.of(context).textTheme.subtitle1.copyWith(
-                              color: Colors.black,
-                            ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: spacing,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _controller
-                          .onLayoutCollapsed(_controller.expandFlag.value);
-                    },
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text(
-                        "View Invitees",
-                        style: Theme.of(context).textTheme.headline5.copyWith(
-                              color: blue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
+                    SizedBox(
+                      height: spacing * 1 / 2,
                     ),
-                  ),
-                  SizedBox(
-                    height: spacing,
-                  ),
-                ],
-              ),
-            ),
-            Obx(
-              () => ExpandableContainer(
-                expanded: _controller.expandFlag.value,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  itemBuilder: (BuildContext context, int index) {
-                    return new Container(
-                      padding: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
-                      child: new ListTile(
-                        title: new Text(
-                          "Cool $index",
-                          style: new TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.black),
-                        ),
-                        leading: Container(
-                          width: 60.0,
-                          height: 60.0,
-                          decoration: new BoxDecoration(
-                            color: const Color(0xff7c94b6),
-                            image: new DecorationImage(
-                              image: new NetworkImage(
-                                  'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius:
-                                new BorderRadius.all(new Radius.circular(50.0)),
-                            border: new Border.all(
-                              color: white,
-                              width: 4.0,
-                            ),
+                    Text(
+                      "New York to San Francisco",
+                      style: Theme.of(context).textTheme.headline5.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "One-Way Deal",
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            color: orange,
                           ),
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "03/14/2021 (9:00 a.m.)",
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                color: Colors.black,
+                              ),
                         ),
-                        trailing: SvgPicture.asset('assets/tick.svg'),
+                        Text(
+                          "\$7,500.00 per seat",
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                color: Colors.black,
+                              ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _controller
+                            .onLayoutCollapsed(_controller.expandFlag.value);
+                      },
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          "View Invitees",
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                                color: blue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                       ),
-                    );
-                  },
-                  itemCount: 2,
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Obx(
+                () => ExpandableContainer(
+                  expanded: _controller.expandFlag.value,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (BuildContext context, int index) {
+                      return new Container(
+                        padding: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
+                        child: new ListTile(
+                          title: new Text(
+                            "Cool $index",
+                            style: new TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          leading: Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                              color: const Color(0xff7c94b6),
+                              image: new DecorationImage(
+                                image: new NetworkImage(
+                                    'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: new BorderRadius.all(
+                                  new Radius.circular(50.0)),
+                              border: new Border.all(
+                                color: white,
+                                width: 4.0,
+                              ),
+                            ),
+                          ),
+                          trailing: SvgPicture.asset('assets/tick.svg'),
+                        ),
+                      );
+                    },
+                    itemCount: 2,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -75,7 +75,7 @@ class ShareAppPage extends StatelessWidget {
                         ),
                         child: InkWell(
                           onTap: () {
-                            Get.toNamed("/home");
+                            Get.toNamed("/invitePage");
                           },
                           child: new Container(
                             width: Get.width * 0.4,
