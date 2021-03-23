@@ -1,9 +1,32 @@
+import 'dart:io';
+
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
-class PaymentPage extends StatelessWidget {
+class PaymentPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _PaymentPageState();
+  }
+}
+
+class _PaymentPageState extends State<PaymentPage> {
+  Token _paymentToken;
+  PaymentMethod _paymentMethod;
+  String _error;
+
+  //this client secret is typically created by a backend system
+  //check https://stripe.com/docs/payments/payment-intents#passing-to-client
+  final String _paymentIntentClientSecret = null;
+
+  PaymentIntentResult _paymentIntent;
+  Source _source;
+
+  ScrollController _controllerScroller = ScrollController();
+
   final HomeController _controller = Get.find();
   final _radioValue1 = 0;
   final _radioValue2 = -1;
@@ -271,7 +294,8 @@ class PaymentPage extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  Get.toNamed("/home");
+                                  makePayment();
+                                  // Get.toNamed("/home");
                                 },
                                 child: new Container(
                                   width: Get.width * 0.4,
@@ -301,4 +325,59 @@ class PaymentPage extends StatelessWidget {
       ),
     );
   }
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
+  @override
+  initState() {
+    super.initState();
+
+    StripePayment.setOptions(StripeOptions(
+      publishableKey:
+          "pk_test_51H7eG6A0yLzRBR1DifWgTT0YFH3zafvLJuWQYlewPRJU8DN8SvdTov0BYZk9lgd252ulE17xOJEaTBAvvJRExq1000MqoAh1eI",
+      merchantId: "Test",
+      androidPayMode: 'test',
+    ));
+  }
+
+  // sk_test_51H7eG6A0yLzRBR1DeU55vxzt5s4hIlZcRSGMgfbew5TqKaLSaxjPWhHJudHPF8RMW0Qpso82ic3niuYaDFlt0vc800eNNgyDl4
+
+  void setError(dynamic error) {
+    Get.snackbar("error", error.toString());
+    setState(() {
+      _error = error.toString();
+    });
+  }
+
+  void makePayment() {
+    // if (Platform.isIOS) {
+    StripePayment.paymentRequestWithNativePay(
+      androidPayOptions: AndroidPayPaymentRequest(
+        totalPrice: "1.20",
+        currencyCode: "EUR",
+      ),
+      applePayOptions: ApplePayPaymentOptions(
+        countryCode: 'DE',
+        currencyCode: 'EUR',
+        items: [
+          ApplePayItem(
+            label: 'Test',
+            amount: '13',
+          )
+        ],
+      ),
+    ).then((token) {
+      setState(() {
+        _scaffoldKey.currentState
+            .showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
+        _paymentToken = token;
+        StripePayment.completeNativePayRequest().then((_) {
+          _scaffoldKey.currentState
+              .showSnackBar(SnackBar(content: Text('Completed successfully')));
+        }).catchError(setError);
+      });
+    }).catchError(setError);
+  }
+
+// }
 }

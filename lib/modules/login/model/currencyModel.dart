@@ -4,12 +4,12 @@
 
 import 'dart:convert';
 
-Currency currencyFromJson(String str) => Currency.fromJson(json.decode(str));
+UserModel currencyFromJson(String str) => UserModel.fromJson(json.decode(str));
 
-String currencyToJson(Currency data) => json.encode(data.toJson());
+String currencyToJson(UserModel data) => json.encode(data.toJson());
 
-class Currency {
-  Currency({
+class UserModel {
+  UserModel({
     this.rates,
     this.base,
     this.date,
@@ -19,7 +19,7 @@ class Currency {
   String base;
   DateTime date;
 
-  factory Currency.fromJson(Map<String, dynamic> json) => Currency(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         rates: Map.from(json["rates"])
             .map((k, v) => MapEntry<String, dynamic>(k, v.toDouble())),
         base: json["base"],
