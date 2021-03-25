@@ -177,17 +177,19 @@ class _PaymentPageState extends State<PaymentPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                (Get.arguments != null)
+                                    ? Text(
+                                        "${Get.arguments[0].toString()} passenger",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1
+                                            .copyWith(
+                                              color: Colors.black,
+                                            ),
+                                      )
+                                    : Container(),
                                 Text(
-                                  "1 passenger",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      .copyWith(
-                                        color: Colors.black,
-                                      ),
-                                ),
-                                Text(
-                                  "\$7,500.00",
+                                  "\$${Get.arguments[1].toString()}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle1
@@ -220,7 +222,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                       ),
                                 ),
                                 Text(
-                                  "\$7,500.00",
+                                  "\$${Get.arguments[1].toString()}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline5

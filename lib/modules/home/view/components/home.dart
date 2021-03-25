@@ -20,6 +20,12 @@ class _HomeState extends State<Home> {
   var _selectedIndex = 0;
   String pageTitle = "home";
 
+  @override
+  void initState() {
+    super.initState();
+    _controller.getProfileData();
+  }
+
   /*
   * On Bottom Navigation item click Listener
   * */

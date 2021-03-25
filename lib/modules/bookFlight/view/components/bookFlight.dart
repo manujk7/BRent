@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 class BookFlightPage extends StatelessWidget {
   final HomeController _controller = Get.find();
+  int passengers = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -171,6 +172,8 @@ class BookFlightPage extends StatelessWidget {
                                 ),
                               ),
                               onValue: (value) {
+                                _controller.updateData(value);
+                                passengers = value;
                                 print(value.toString());
                               },
                             ),
@@ -210,14 +213,16 @@ class BookFlightPage extends StatelessWidget {
                                     color: Colors.black,
                                   ),
                             ),
-                            Text(
-                              "\$7,500.00",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  .copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                            Obx(
+                              () => Text(
+                                "\$${_controller.totalPrice}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    .copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ],
                         ),
@@ -234,7 +239,10 @@ class BookFlightPage extends StatelessWidget {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Get.toNamed("/paymentPage");
+                              Get.toNamed("/paymentPage", arguments: [
+                                passengers,
+                                _controller.totalPrice
+                              ]);
                             },
                             child: new Container(
                               width: Get.width * 0.4,

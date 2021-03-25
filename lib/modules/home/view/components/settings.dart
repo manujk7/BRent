@@ -1,5 +1,8 @@
 import 'package:brent/extras/constants.dart';
+import 'package:brent/modules/firstPage/view/firstPage.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/services/commonMessageStatusModel.dart';
+import 'package:brent/services/prefrences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,9 +40,28 @@ class SettingsPage extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
+                          SizedBox(
+                            height: spacing * 2,
+                          ),
                           Container(
                             margin: EdgeInsets.only(
-                              top: 10,
+                              top: 12,
+                              bottom: 10,
+                            ),
+                            child: Obx(
+                              () => _controller.getProfile.value != null
+                                  ? Text(
+                                      _controller.getProfile().name,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    )
+                                  : Container(),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
                               bottom: 10,
                             ),
                             padding: EdgeInsets.only(top: 8),
@@ -65,17 +87,23 @@ class SettingsPage extends StatelessWidget {
                                   color: Colors.black, width: 2.0),
                               borderRadius: new BorderRadius.circular(6.0),
                             ),
-                            child: InkWell(
-                              onTap: () {
-                                Get.toNamed("/signUp");
-                              },
-                              child: new Container(
-                                width: Get.width * 0.4,
-                                child: new Center(
-                                  child: new Text(
-                                    "Log out",
-                                    style: new TextStyle(
-                                        fontSize: 18.0, color: Colors.black),
+                            child: Obx(
+                              () => InkWell(
+                                onTap: () {
+                                  !_controller.showLoader.value
+                                      ? logout()
+                                      : null;
+                                },
+                                child: new Container(
+                                  width: Get.width * 0.4,
+                                  child: new Center(
+                                    child: new Text(
+                                      !_controller.showLoader.value
+                                          ? "Log out"
+                                          : "Please Wait..",
+                                      style: new TextStyle(
+                                          fontSize: 18.0, color: Colors.black),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -129,7 +157,6 @@ class SettingsPage extends StatelessWidget {
             if (index == 0) {
               Get.toNamed('/profile');
             } else if (index == 1) {
-
             } else if (index == 2) {
               Get.toNamed('/shareApp');
             } else if (index == 3) {
@@ -158,5 +185,23 @@ class SettingsPage extends StatelessWidget {
         )
       ],
     );
+  }
+
+  /// ------------------------------------------------------------
+  /// Method that handles click of logout button
+  /// ------------------------------------------------------------
+  Future<void> logout() async {
+    _controller.showLoader.value = true;
+    StatusMessageModel userModel = await _controller.logout();
+    if (userModel.status == "true") {
+      _controller.showLoader.value = false;
+      final _prefs = SharedPrefs();
+      _prefs.clearPrefs();
+      Get.snackbar("Success", userModel.msg);
+      Get.offAll(() => FirstPage());
+    } else {
+      _controller.showLoader.value = false;
+      Get.snackbar("Error", userModel.msg);
+    }
   }
 }
