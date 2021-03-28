@@ -29,133 +29,135 @@ class LoginPage extends StatelessWidget {
       ),
       backgroundColor: background,
       body: SafeArea(
-        child: Container(
-          width: Get.width,
-          margin: EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 16.0),
-          child: Column(
-            children: [
-              Material(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                color: white,
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        logoImage,
-                        height: 200.0,
-                      ),
-                      SizedBox(
-                        height: spacing * 1 / 2,
-                      ),
-                      Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextField(
-                              textAlign: TextAlign.start,
-                              controller: emailController,
-                              onSubmitted: (v) {
-                                FocusScope.of(context).requestFocus(focus);
-                              },
-                              keyboardType: TextInputType.emailAddress,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                hintText: "Email address",
-                                hintStyle: TextStyle(fontSize: 16),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: BorderSide(
-                                    width: 0.1,
-                                    style: BorderStyle.solid,
-                                    color: borderBg,
-                                  ),
-                                ),
-                                contentPadding: EdgeInsets.all(20),
-                              ),
-                            ),
-                            SizedBox(
-                              height: spacing,
-                            ),
-                            Obx(
-                              () => TextField(
+        child: SingleChildScrollView(
+          child: Container(
+            width: Get.width,
+            margin: EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 16.0),
+            child: Column(
+              children: [
+                Material(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  color: white,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          logoImage,
+                          height: 200.0,
+                        ),
+                        SizedBox(
+                          height: spacing * 1 / 2,
+                        ),
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextField(
                                 textAlign: TextAlign.start,
-                                keyboardType: TextInputType.text,
-                                focusNode: focus,
-                                controller: passwordController,
-                                textAlignVertical: TextAlignVertical.center,
-                                obscureText: _controller.isHidden.value,
+                                controller: emailController,
+                                onSubmitted: (v) {
+                                  FocusScope.of(context).requestFocus(focus);
+                                },
+                                keyboardType: TextInputType.emailAddress,
+                                obscureText: false,
                                 decoration: InputDecoration(
-                                  hintText: "Password",
+                                  hintText: "Email address",
                                   hintStyle: TextStyle(fontSize: 16),
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(6),
                                     borderSide: BorderSide(
-                                        width: 0.5,
-                                        style: BorderStyle.none,
-                                        color: lightGrey),
+                                      width: 0.1,
+                                      style: BorderStyle.solid,
+                                      color: borderBg,
+                                    ),
                                   ),
                                   contentPadding: EdgeInsets.all(20),
-                                  suffix: InkWell(
-                                    onTap: _controller.togglePasswordView,
-                                    child: Icon(
-                                      _controller.isHidden.value
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_rounded,
-                                      color: blue,
+                                ),
+                              ),
+                              SizedBox(
+                                height: spacing,
+                              ),
+                              Obx(
+                                () => TextField(
+                                  textAlign: TextAlign.start,
+                                  keyboardType: TextInputType.text,
+                                  focusNode: focus,
+                                  controller: passwordController,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  obscureText: _controller.isHidden.value,
+                                  decoration: InputDecoration(
+                                    hintText: "Password",
+                                    hintStyle: TextStyle(fontSize: 16),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                          width: 0.5,
+                                          style: BorderStyle.none,
+                                          color: lightGrey),
+                                    ),
+                                    contentPadding: EdgeInsets.all(20),
+                                    suffix: InkWell(
+                                      onTap: _controller.togglePasswordView,
+                                      child: Icon(
+                                        _controller.isHidden.value
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_rounded,
+                                        color: blue,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: spacing * 1,
-                      ),
-                      Container(
-                        width: Get.width,
-                        height: 56.0,
-                        decoration: new BoxDecoration(
-                          color: blue,
-                          border: new Border.all(color: blue, width: 2.0),
-                          borderRadius: new BorderRadius.circular(6.0),
+                        SizedBox(
+                          height: spacing * 1,
                         ),
-                        child: Obx(
-                          () => InkWell(
-                            onTap: () {
-                              !_controller.showLoader.value
-                                  ? loginLogic()
-                                  : null;
-                            },
-                            child: new Container(
-                              width: Get.width * 0.4,
-                              child: new Center(
-                                child: new Text(
-                                  !_controller.showLoader.value
-                                      ? "Log in"
-                                      : "Please wait..",
-                                  style: new TextStyle(
-                                      fontSize: 18.0, color: Colors.white),
+                        Container(
+                          width: Get.width,
+                          height: 56.0,
+                          decoration: new BoxDecoration(
+                            color: blue,
+                            border: new Border.all(color: blue, width: 2.0),
+                            borderRadius: new BorderRadius.circular(6.0),
+                          ),
+                          child: Obx(
+                            () => InkWell(
+                              onTap: () {
+                                !_controller.showLoader.value
+                                    ? loginLogic()
+                                    : null;
+                              },
+                              child: new Container(
+                                width: Get.width * 0.4,
+                                child: new Center(
+                                  child: new Text(
+                                    !_controller.showLoader.value
+                                        ? "Log in"
+                                        : "Please wait..",
+                                    style: new TextStyle(
+                                        fontSize: 18.0, color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: spacing * 1,
-                      ),
-                    ],
+                        SizedBox(
+                          height: spacing * 1,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

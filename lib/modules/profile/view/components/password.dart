@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/profile/controller/profileController.dart';
+import 'package:brent/services/commonMessageStatusModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,9 +14,12 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePasswordState extends State<ChangePassword> {
   final ProfileController _controller = Get.find();
-  bool isHiddenOld = false;
-  bool isHiddenNew = false;
-  bool isHiddenNewConfirm = false;
+  bool isHiddenOld = true;
+  bool isHiddenNew = true;
+  bool isHiddenNewConfirm = true;
+  final oldPasswordController = new TextEditingController();
+  final newPasswordController = new TextEditingController();
+  final confirmNewPasswordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +65,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           keyboardType: TextInputType.text,
                           textAlignVertical: TextAlignVertical.center,
                           obscureText: isHiddenOld,
+                          controller: oldPasswordController,
                           decoration: InputDecoration(
                             hintText: "Current password",
                             hintStyle: TextStyle(fontSize: 16),
@@ -91,6 +96,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           keyboardType: TextInputType.text,
                           textAlignVertical: TextAlignVertical.center,
                           obscureText: isHiddenNew,
+                          controller: newPasswordController,
                           decoration: InputDecoration(
                             hintText: "New password",
                             hintStyle: TextStyle(fontSize: 16),
@@ -121,6 +127,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           keyboardType: TextInputType.text,
                           textAlignVertical: TextAlignVertical.center,
                           obscureText: isHiddenNewConfirm,
+                          controller: confirmNewPasswordController,
                           decoration: InputDecoration(
                             hintText: "Confirm new password",
                             hintStyle: TextStyle(fontSize: 16),
@@ -154,17 +161,23 @@ class _ChangePasswordState extends State<ChangePassword> {
                             border: new Border.all(color: blue, width: 2.0),
                             borderRadius: new BorderRadius.circular(6.0),
                           ),
-                          child: InkWell(
-                            onTap: () {
-                              Get.toNamed("/home");
-                            },
-                            child: new Container(
-                              width: Get.width * 0.4,
-                              child: new Center(
-                                child: new Text(
-                                  "Save changes",
-                                  style: new TextStyle(
-                                      fontSize: 18.0, color: Colors.white),
+                          child: Obx(
+                            () => InkWell(
+                              onTap: () {
+                                !_controller.showLoader.value
+                                    ? updatePasswordLogic()
+                                    : null;
+                              },
+                              child: new Container(
+                                width: Get.width * 0.4,
+                                child: new Center(
+                                  child: new Text(
+                                    !_controller.showLoader.value
+                                        ? "Save changes"
+                                        : "Please wait..",
+                                    style: new TextStyle(
+                                        fontSize: 18.0, color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ),
@@ -201,5 +214,40 @@ class _ChangePasswordState extends State<ChangePassword> {
     setState(() {
       isHiddenNewConfirm = !isHiddenNewConfirm;
     });
+  }
+
+  /// ------------------------------------------------------------
+  /// Method that handles click of updatePassword button
+  /// ------------------------------------------------------------
+
+  Future<void> updatePasswordLogic() async {
+    if (oldPasswordController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Enter old password");
+      return;
+    }
+    if (newPasswordController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Enter old password");
+      return;
+    }
+    if (newPasswordController.text.toString().trim() !=
+        confirmNewPasswordController.text.toString().trim()) {
+      Get.snackbar("Error", "Enter enter the same new password");
+      return;
+    }
+    _controller.showLoader.value = true;
+    StatusMessageModel userModel = await _controller.updatePassword(
+        oldPasswordController.text.trim(), newPasswordController.text.trim());
+    if (userModel.status == "true") {
+      _controller.showLoader.value = false;
+      setState(() {
+        oldPasswordController.text = "";
+        newPasswordController.text = "";
+        confirmNewPasswordController.text = "";
+      });
+      Get.snackbar("Success", userModel.msg);
+    } else {
+      _controller.showLoader.value = false;
+      Get.snackbar("Error", userModel.msg);
+    }
   }
 }

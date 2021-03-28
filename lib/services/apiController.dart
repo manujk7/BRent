@@ -1,28 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:brent/modules/home/model/createFlightModel.dart';
+import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:brent/modules/login/model/userModel.dart';
 import 'package:get/get.dart';
 
 import 'commonMessageStatusModel.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class ApiController extends GetConnect {
   final baseUrl = "http://gendeep.com/dev/brent/Data_v1/";
-
-  /// API call to get currency conversion
-// Future<Currency> getCurrencyValues(String base, List<String> compares) async {
-//   String currencies = compares.join(',');
-//   print("CURR: $currencies");
-//   var response = await get("base=$base&symbols=$currencies");
-//   if (response.status.hasError) {
-//     return Future.error(response.statusText);
-//   } else {
-//     var data = response.body;
-//     print(data.toString());
-//     var result = jsonEncode(data);
-//     return currencyFromJson(result.toString());
-//   }
-// }
-//
 
   /// API call to login
   Future<UserModel> loginUser(String email, String password) async {
@@ -40,7 +30,110 @@ class ApiController extends GetConnect {
     }
   }
 
-  /// API call to login
+  /// API call to updatePassword
+  Future<StatusMessageModel> updatePassword(
+      String authCode, String oldPassword, String newPassword) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'old_password': oldPassword,
+      'new_password': newPassword,
+    });
+    var response = await post("updatepassword", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return statusMessageModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to getProfile
+  Future<UserModel> getProfile(
+      String authCode, String deviceType, String deviceId) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'device_type': deviceType,
+      'device_id': deviceId,
+    });
+    var response = await post("getProfile", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return userModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to updateProfile
+  Future<UserModel> updateProfile(String authCode, String phone, String address,
+      String city, String state, String zipCode) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'phone': phone,
+      'address': address,
+      'city': city,
+      'state': state,
+      'zipcode': zipCode,
+    });
+    var response = await post("updateProfile", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return userModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to createFlight
+  Future<CreateFlightModel> createFlight(
+      String authCode,
+      String from,
+      String to,
+      String flightDate,
+      String timeOfDeparture,
+      String timeOfArrival,
+      String oneWaySwitch) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'from': from,
+      'to': to,
+      'flight_date': flightDate,
+      'time_of_departure': timeOfDeparture,
+      'time_of_arrival': timeOfArrival,
+      'way': oneWaySwitch,
+    });
+    var response = await post("createFlight", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return createFlightModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to updateProfilePic
+  Future<UserModel> updateProfilePic(String authCode, File profilePic) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'profile_pic': MultipartFile(profilePic,
+          filename: profilePic.path, contentType: "image/png")
+    });
+    print(form);
+    var response = await post("updatefile", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return userModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to register
   Future<UserModel> registerUser(
       String name,
       String email,
@@ -86,6 +179,21 @@ class ApiController extends GetConnect {
       var data = response.body;
       print(data.toString());
       return statusMessageModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to homeData
+  Future<HomeModel> home(String authCode) async {
+    final form = FormData({
+      'auth_code': authCode,
+    });
+    var response = await post("home", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return homeModelFromJson(response.body.toString());
     }
   }
 }

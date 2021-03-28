@@ -21,124 +21,160 @@ class SettingsPage extends StatelessWidget {
       backgroundColor: background,
       body: SafeArea(
         maintainBottomViewPadding: true,
-        child: Container(
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Column(
-                children: [
-                  Container(
-                    height: 70,
-                  ),
-                  Material(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.only(bottom: 12),
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      height: 70,
                     ),
-                    child: Container(
-                      margin: EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          SizedBox(
-                            height: spacing * 2,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                              top: 12,
-                              bottom: 10,
+                    Material(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            SizedBox(
+                              height: spacing * 2,
                             ),
-                            child: Obx(
-                              () => _controller.getProfile.value != null
-                                  ? Text(
-                                      _controller.getProfile().name,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    )
-                                  : Container(),
+                            Container(
+                              margin: EdgeInsets.only(
+                                top: 12,
+                                bottom: 10,
+                              ),
+                              child: Obx(
+                                () => _controller.getProfile.value != null
+                                    ? Text(
+                                        _controller.getProfile().name,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      )
+                                    : Container(),
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                              bottom: 10,
-                            ),
-                            padding: EdgeInsets.only(top: 8),
-                            child: ListView.builder(
-                              itemCount: profileOptions.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext ctxt, int index) {
-                                var model = profileOptions[index];
-                                return profileItemView(model, index);
-                              },
-                            ),
-                          ),
-                          Container(
-                            width: Get.width * 1,
-                            height: 56.0,
-                            margin: EdgeInsets.only(
-                              top: 10,
-                              bottom: 10,
-                            ),
-                            decoration: new BoxDecoration(
-                              color: white,
-                              border: new Border.all(
-                                  color: Colors.black, width: 2.0),
-                              borderRadius: new BorderRadius.circular(6.0),
-                            ),
-                            child: Obx(
-                              () => InkWell(
-                                onTap: () {
-                                  !_controller.showLoader.value
-                                      ? logout()
-                                      : null;
+                            Container(
+                              margin: EdgeInsets.only(
+                                bottom: 10,
+                              ),
+                              padding: EdgeInsets.only(top: 8),
+                              child: ListView.builder(
+                                itemCount: profileOptions.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext ctxt, int index) {
+                                  var model = profileOptions[index];
+                                  return profileItemView(model, index);
                                 },
-                                child: new Container(
-                                  width: Get.width * 0.4,
-                                  child: new Center(
-                                    child: new Text(
-                                      !_controller.showLoader.value
-                                          ? "Log out"
-                                          : "Please Wait..",
-                                      style: new TextStyle(
-                                          fontSize: 18.0, color: Colors.black),
+                              ),
+                            ),
+                            Container(
+                              width: Get.width * 1,
+                              height: 56.0,
+                              margin: EdgeInsets.only(
+                                top: 10,
+                                bottom: 10,
+                              ),
+                              decoration: new BoxDecoration(
+                                color: white,
+                                border: new Border.all(
+                                    color: Colors.black, width: 2.0),
+                                borderRadius: new BorderRadius.circular(6.0),
+                              ),
+                              child: Obx(
+                                () => InkWell(
+                                  onTap: () {
+                                    !_controller.showLoader.value
+                                        ? logout()
+                                        : null;
+                                  },
+                                  child: new Container(
+                                    width: Get.width * 0.4,
+                                    child: new Center(
+                                      child: new Text(
+                                        !_controller.showLoader.value
+                                            ? "Log out"
+                                            : "Please Wait..",
+                                        style: new TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Positioned(
-                top: 15.0,
-                // (background container size) - (circle height / 2)
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    height: 110.0,
-                    width: 110.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
-                        fit: BoxFit.cover,
-                      ),
-                      border: Border.all(
-                        color: white,
-                        width: 5,
-                      ),
-                    ),
-                  ),
+                  ],
                 ),
-              )
-            ],
+                _controller.getProfile != null
+                    ? Positioned(
+                        top: 15.0,
+                        // (background container size) - (circle height / 2)
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 110.0,
+                            width: 110.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(_controller
+                                                .getProfile()
+                                                .profilePic !=
+                                            null &&
+                                        _controller
+                                            .getProfile()
+                                            .profilePic
+                                            .isNotEmpty
+                                    ? _controller.getProfile().profilePic
+                                    : "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
+                                fit: BoxFit.cover,
+                              ),
+                              border: Border.all(
+                                color: white,
+                                width: 5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Positioned(
+                        top: 15.0,
+                        // (background container size) - (circle height / 2)
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 110.0,
+                            width: 110.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
+                                fit: BoxFit.cover,
+                              ),
+                              border: Border.all(
+                                color: white,
+                                width: 5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+              ],
+            ),
           ),
         ),
       ),

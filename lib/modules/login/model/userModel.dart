@@ -39,24 +39,25 @@ class UserModel {
 }
 
 class Profile {
-  Profile({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.password,
-    this.address,
-    this.city,
-    this.state,
-    this.zipcode,
-    this.referCode,
-    this.createdAt,
-    this.updatedAt,
-    this.lastLogin,
-  });
+  Profile(
+      {this.id,
+      this.name,
+      this.email,
+      this.phone,
+      this.password,
+      this.address,
+      this.city,
+      this.state,
+      this.zipcode,
+      this.referCode,
+      this.createdAt,
+      this.updatedAt,
+      this.lastLogin,
+      this.profilePic});
 
   String id;
   String name;
+  String profilePic;
   String email;
   String phone;
   String password;
@@ -72,6 +73,7 @@ class Profile {
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
         id: json["id"],
         name: json["name"],
+        profilePic: json["profile_pic"],
         email: json["email"],
         phone: json["phone"],
         password: json["password"],
@@ -88,6 +90,7 @@ class Profile {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "profile_pic": profilePic,
         "email": email,
         "phone": phone,
         "password": password,

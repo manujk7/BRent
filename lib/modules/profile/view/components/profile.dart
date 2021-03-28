@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/login/model/userModel.dart';
 import 'package:brent/modules/profile/controller/profileController.dart';
+import 'package:brent/services/prefrences.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +31,7 @@ class _ProfileState extends State<ProfilePage> {
   final cityController = new TextEditingController();
   final zipCodeController = new TextEditingController();
   String stateValue = "";
+  final _prefs = SharedPrefs();
 
   @override
   void initState() {
@@ -114,6 +119,7 @@ class _ProfileState extends State<ProfilePage> {
                                     keyboardType: TextInputType.emailAddress,
                                     obscureText: false,
                                     controller: emailController,
+                                    enabled: false,
                                     decoration: InputDecoration(
                                       hintText: "Email address",
                                       hintStyle: TextStyle(fontSize: 16),
@@ -360,18 +366,24 @@ class _ProfileState extends State<ProfilePage> {
                                       borderRadius:
                                           new BorderRadius.circular(6.0),
                                     ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.toNamed("/home");
-                                      },
-                                      child: new Container(
-                                        width: Get.width * 0.4,
-                                        child: new Center(
-                                          child: new Text(
-                                            "Save changes",
-                                            style: new TextStyle(
-                                                fontSize: 18.0,
-                                                color: Colors.white),
+                                    child: Obx(
+                                      () => InkWell(
+                                        onTap: () {
+                                          !_controller.showLoader.value
+                                              ? updateProfile()
+                                              : null;
+                                        },
+                                        child: new Container(
+                                          width: Get.width * 0.4,
+                                          child: new Center(
+                                            child: new Text(
+                                              !_controller.showLoader.value
+                                                  ? "Save changes"
+                                                  : "Please Wait..",
+                                              style: new TextStyle(
+                                                  fontSize: 18.0,
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -386,29 +398,56 @@ class _ProfileState extends State<ProfilePage> {
                           ),
                         ],
                       ),
+                      Obx(
+                        () => !_controller.showLoader.value
+                            ? Positioned(
+                                top: 15.0,
+                                // (background container size) - (circle height / 2)
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    height: 110.0,
+                                    width: 110.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: NetworkImage(_controllerHome
+                                                        .getProfile()
+                                                        .profilePic !=
+                                                    null &&
+                                                _controllerHome
+                                                    .getProfile()
+                                                    .profilePic
+                                                    .isNotEmpty
+                                            ? _controllerHome
+                                                .getProfile()
+                                                .profilePic
+                                            : "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      border: Border.all(
+                                        color: white,
+                                        width: 5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ),
                       Positioned(
-                        top: 15.0,
-                        // (background container size) - (circle height / 2)
+                        top: 16,
+                        right: 165,
                         child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 110.0,
-                            width: 110.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
-                                fit: BoxFit.cover,
-                              ),
-                              border: Border.all(
-                                color: white,
-                                width: 5,
-                              ),
-                            ),
+                          onTap: () {
+                            _pickImage(context);
+                          },
+                          child: SvgPicture.asset(
+                            'assets/edit.svg',
+                            height: 24,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 )
@@ -439,8 +478,10 @@ class _ProfileState extends State<ProfilePage> {
     if (imageSource != null) {
       var image =
           await ImagePicker().getImage(source: imageSource, imageQuality: 60);
-      _controller.imageFile = File(image.path);
-      _cropImage();
+      if (image != null) {
+        _controller.imageFile = File(image.path);
+        _cropImage();
+      }
     }
   }
 
@@ -474,188 +515,75 @@ class _ProfileState extends State<ProfilePage> {
     if (croppedFile != null) {
       _controller.imageFile = croppedFile;
       _controller.state.value = AppState.cropped;
+      _controllerHome.userModel.value =
+          await _controllerHome.updateProfilePic(_controller.imageFile);
+      if (_controllerHome.userModel().status == "true") {
+        _clearImage();
+        _prefs.saveProfile(jsonEncode(_controllerHome.userModel().profile));
+        _controllerHome.getProfile.value = _controllerHome.userModel().profile;
+      }
     }
   }
 
-  void updatingPassword(BuildContext context) {
-    TextEditingController oldPasswordController = new TextEditingController();
-    TextEditingController newPasswordController = new TextEditingController();
-    TextEditingController confirmPasswordController =
-        new TextEditingController();
-    var isShowDialog = false;
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return Center(
-            child: SingleChildScrollView(
-          child: AlertDialog(
-            backgroundColor: Colors.white,
-            contentPadding: EdgeInsets.all(0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-            elevation: 0,
-            content: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Flexible(
-                    child: Container(
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: blue,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8)),
-                      ),
-                      child: Text(
-                        "Update Password",
-                        style: TextStyle(color: white),
-                      ),
-                      alignment: Alignment.center,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 24, right: 24, top: 24),
-                          child: TextField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(color: lightGrey),
-                              hintText: 'Old Password',
+  bool isEmail(String em) {
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(p);
+    return regExp.hasMatch(em);
+  }
 
-                              /*icon: Image.asset(
-                              "assets/icons/ic_email.png",
-                              height: 24,
-                            ),*/
-                            ),
-                            style: TextStyle(color: grey),
-                            controller: oldPasswordController,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                          ),
-                          height: 2,
-                          color: white,
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 24, right: 24, top: 24),
-                          child: TextField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(color: lightGrey),
-                              hintText: 'New Password',
+  /// ------------------------------------------------------------
+  /// Method that handles click of update profile button
+  /// ------------------------------------------------------------
+  Future<void> updateProfile() async {
+    if (emailController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Please enter email id");
+      return;
+    }
 
-                              /*icon: Image.asset(
-                              "assets/icons/ic_email.png",
-                              height: 24,
-                            ),*/
-                            ),
-                            style: TextStyle(color: lightGrey),
-                            controller: newPasswordController,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                          ),
-                          height: 2,
-                          color: white,
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 24, right: 24, top: 24),
-                          child: TextField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(color: lightGrey),
-                              hintText: 'Confirm Password',
+    if (numberController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Please enter number");
+      return;
+    }
 
-                              /*icon: Image.asset(
-                              "assets/icons/ic_email.png",
-                              height: 24,
-                            ),*/
-                            ),
-                            style: TextStyle(color: lightGrey),
-                            controller: confirmPasswordController,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                          ),
-                          height: 2,
-                          color: white,
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            Constants.hideKeyBoard();
-                            if (oldPasswordController.text.toString().isEmpty) {
-                              Get.snackbar(
-                                  "Invalid", "Please enter old password");
-                              return;
-                            }
-                            if (newPasswordController.text.toString().isEmpty) {
-                              Get.snackbar(
-                                  "Invalid", "Please enter new password");
-                              return;
-                            }
-                            if (newPasswordController.text.toString() !=
-                                confirmPasswordController.text.toString()) {
-                              Get.snackbar("Invalid",
-                                  "New password and Confirm password do not match.");
-                              return;
-                            }
-                          },
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              color: blue,
-                            ),
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.only(
-                              top: 12,
-                              bottom: 12,
-                              left: 24,
-                              right: 24,
-                            ),
-                            margin: EdgeInsets.all(24),
-                            child: Text(
-                              !isShowDialog ? "DONE" : "Loading",
-                              style: TextStyle(
-                                color: white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ));
-      },
+    if (addressController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Please enter address");
+      return;
+    }
+
+    if (cityController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Please enter city");
+      return;
+    }
+
+    if (!isEmail(emailController.text.toString().trim())) {
+      Get.snackbar("Error", "Please enter valid email id");
+      return;
+    }
+
+    if (stateValue.isEmpty) {
+      Get.snackbar("Error", "Please select state");
+      return;
+    }
+
+    _controller.showLoader.value = true;
+
+    UserModel userModel = await _controllerHome.updateProfile(
+      numberController.text,
+      addressController.text,
+      cityController.text,
+      stateValue,
+      zipCodeController.text,
     );
+
+    if (userModel.status == "true") {
+      _controller.showLoader.value = false;
+      Get.snackbar("Success", userModel.msg);
+      _prefs.saveProfile(jsonEncode(_controllerHome.userModel().profile));
+      _controllerHome.getProfile.value = _controllerHome.userModel().profile;
+    } else {
+      _controller.showLoader.value = false;
+      Get.snackbar("Error", userModel.msg);
+    }
   }
 }

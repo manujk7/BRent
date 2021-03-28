@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/view/components/create.dart';
 import 'package:brent/modules/home/view/components/homePage.dart';
 import 'package:brent/modules/home/view/components/invite.dart';
 import 'package:brent/modules/home/view/components/settings.dart';
+import 'package:brent/services/prefrences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'homePage.dart';
@@ -19,10 +22,27 @@ class _HomeState extends State<Home> {
   final HomeController _controller = Get.find();
   var _selectedIndex = 0;
   String pageTitle = "home";
+  String deviceId = "123";
+  String deviceType = "";
+  final _prefs = SharedPrefs();
 
   @override
   void initState() {
     super.initState();
+    getProfile();
+  }
+
+  Future<void> getProfile() async {
+    if (GetPlatform.isIOS) {
+      deviceType = "2";
+    } else {
+      deviceType = "1";
+    }
+    _controller.userModel.value =
+        await _controller.getProfileApi(deviceType, deviceId);
+    if (_controller.userModel().status == "true") {
+      _prefs.saveProfile(jsonEncode(_controller.userModel().profile));
+    }
     _controller.getProfileData();
   }
 
@@ -101,7 +121,7 @@ class _HomeState extends State<Home> {
           child: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage('assets//icons/home.png')),
+                icon: ImageIcon(AssetImage('assets/icons/home.png')),
                 activeIcon:
                     ImageIcon(AssetImage('assets/icons/home_selected.png')),
                 title: Text('Home'),

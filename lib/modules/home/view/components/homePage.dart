@@ -1,30 +1,36 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/home/controller/homePageController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  final HomeController _controller = Get.find();
+  final HomePageController _controller = Get.find();
   final ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: background,
-      body: SafeArea(
-        maintainBottomViewPadding: true,
-        child: Container(
-          margin: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
-          child: ListView.builder(
-            itemCount: 12,
-            shrinkWrap: true,
-            controller: _scrollController,
-            itemBuilder: (BuildContext context, int index) {
-              return homeListView(context, index);
-            },
-          ),
+      body: Obx(
+        () => SafeArea(
+          maintainBottomViewPadding: true,
+          child: !_controller.showHomeLoader.value
+              ? Container(
+                  margin: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
+                  child: ListView.builder(
+                    itemCount: _controller.homeModel().allFlight.length,
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    itemBuilder: (BuildContext context, int index) {
+                      return homeListView(context, index);
+                    },
+                  ),
+                )
+              : Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator()),
         ),
       ),
     );
@@ -73,7 +79,7 @@ class HomePage extends StatelessWidget {
                       height: spacing * 1 / 2,
                     ),
                     Text(
-                      "New York to San Francisco",
+                      "${_controller.homeModel().allFlight[index].from} to ${_controller.homeModel().allFlight[index].to}",
                       style: Theme.of(context).textTheme.headline5.copyWith(
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
@@ -90,7 +96,7 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "03/14/2021 (9:00 a.m.)",
+                          "${_controller.homeModel().allFlight[index].flightDate} ${_controller.homeModel().allFlight[index].timeOfDeparture}",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 color: Colors.black,
                               ),
