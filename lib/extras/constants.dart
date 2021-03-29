@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 const Color blue = Color(0xFF1FB6FC);
 const Color green = Color(0xFF35bf73);
@@ -15,16 +16,23 @@ const Color grey = Colors.blueGrey;
 const Color background = Color(0xFFF7F7F7);
 const Color borderBg = Color(0xFFDBE2EA);
 const double spacing = 24.0;
-const String logoImage = 'assets/images/logo.png';
+const String logoImage = 'assets/images/logo.jpeg';
 const String firstPagePattern = 'assets/images/firstPagePattern.png';
 const String dummyPlane = 'assets/images/planeDummy.jpg';
 const String dummyPlaneHome = 'assets/images/imagePlane.png';
 
 class Constants {
+  static DateFormat dateFormat = DateFormat("MM/dd/yyyy");
+  static DateFormat dateFormatParse = DateFormat("yyyy-MM-dd HH:mm:ss");
+
   //Function to hide KeyBoard--------------------
   //---------------------------------------------
   static hideKeyBoard() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
+  static getFormattedDate(date) {
+    return Constants.dateFormat.format(Constants.dateFormatParse.parse(date));
   }
 }
 

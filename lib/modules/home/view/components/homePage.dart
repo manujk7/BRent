@@ -1,13 +1,27 @@
 import 'package:brent/extras/constants.dart';
-import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/controller/homePageController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _HomePageState();
+  }
+}
+
+class _HomePageState extends State<HomePage> {
   final HomePageController _controller = Get.find();
   final ScrollController _scrollController = new ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // _controller.onInit();
+    _controller.hitHomeApi();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +33,30 @@ class HomePage extends StatelessWidget {
           child: !_controller.showHomeLoader.value
               ? Container(
                   margin: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
-                  child: ListView.builder(
-                    itemCount: _controller.homeModel().allFlight.length,
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    itemBuilder: (BuildContext context, int index) {
-                      return homeListView(context, index);
-                    },
-                  ),
+                  child: _controller.homeModel != null &&
+                          _controller.homeModel().allFlight != null &&
+                          _controller.homeModel().allFlight.length > 0
+                      ? ListView.builder(
+                          itemCount: _controller.homeModel().allFlight.length,
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          itemBuilder: (BuildContext context, int index) {
+                            return homeListView(context, index);
+                          },
+                        )
+                      : Container(
+                          child: Center(
+                            child: Text(
+                              "No data found..",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                    color: orange,
+                                  ),
+                            ),
+                          ),
+                        ),
                 )
               : Align(
                   alignment: Alignment.center,
@@ -84,7 +114,9 @@ class HomePage extends StatelessWidget {
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "One-Way Deal",
+                      _controller.homeModel().allFlight[index].way == "1"
+                          ? "One-Way Deal"
+                          : "Two-Way Deal",
                       style: Theme.of(context).textTheme.subtitle2.copyWith(
                             color: orange,
                           ),
@@ -96,16 +128,27 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${_controller.homeModel().allFlight[index].flightDate} ${_controller.homeModel().allFlight[index].timeOfDeparture}",
+                          "${Constants.getFormattedDate(_controller.homeModel().allFlight[index].flightDate)} (${_controller.homeModel().allFlight[index].timeOfDeparture}) ",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 color: Colors.black,
                               ),
                         ),
-                        Text(
-                          "\$7,500.00 per seat",
-                          style: Theme.of(context).textTheme.subtitle1.copyWith(
-                                color: Colors.black,
+                        RichText(
+                          text: new TextSpan(
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              new TextSpan(
+                                text: "\$7,500.00 ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
                               ),
+                              new TextSpan(
+                                text: 'per seat',
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

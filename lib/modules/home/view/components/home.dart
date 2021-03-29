@@ -4,7 +4,7 @@ import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/view/components/create.dart';
 import 'package:brent/modules/home/view/components/homePage.dart';
-import 'package:brent/modules/home/view/components/invite.dart';
+import 'package:brent/modules/home/view/components/inbox.dart';
 import 'package:brent/modules/home/view/components/settings.dart';
 import 'package:brent/services/prefrences.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final HomeController _controller = Get.find();
-  var _selectedIndex = 0;
+
   String pageTitle = "home";
   String deviceId = "123";
   String deviceType = "";
@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
   * */
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _controller.selectedIndex.value = index;
       getPageTitle(index);
       if (index == 1) {
       } else if (index == 2) {
@@ -88,15 +88,17 @@ class _HomeState extends State<Home> {
         maintainBottomViewPadding: true,
         child: Column(
           children: [
-            Expanded(
-              child: IndexedStack(
-                index: _selectedIndex,
-                children: [
-                  HomePage(),
-                  CreatePage(),
-                  InvitePage(),
-                  SettingsPage()
-                ],
+            Obx(
+              () => Expanded(
+                child: IndexedStack(
+                  index: _controller.selectedIndex.value,
+                  children: [
+                    HomePage(),
+                    CreatePage(),
+                    InboxPage(),
+                    SettingsPage()
+                  ],
+                ),
               ),
             ),
           ],
@@ -105,53 +107,55 @@ class _HomeState extends State<Home> {
       /*
           * Bottom Navigation bar of Dashboard
           * */
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(24), topLeft: Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24.0),
-            topRight: Radius.circular(24.0),
-          ),
-          child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage('assets/icons/home.png')),
-                activeIcon:
-                    ImageIcon(AssetImage('assets/icons/home_selected.png')),
-                title: Text('Home'),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage('assets/icons/create.png')),
-                activeIcon:
-                    ImageIcon(AssetImage('assets/icons/create_selected.png')),
-                title: Text('Create'),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage('assets/icons/inbox.png')),
-                title: Text('Inbox'),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage('assets/icons/settings.png')),
-                activeIcon:
-                    ImageIcon(AssetImage('assets/icons/settings_selected.png')),
-                title: Text('Settings'),
-              ),
+      bottomNavigationBar: Obx(
+        () => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(24), topLeft: Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
             ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.0),
+              topRight: Radius.circular(24.0),
+            ),
+            child: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/icons/home.png')),
+                  activeIcon:
+                      ImageIcon(AssetImage('assets/icons/home_selected.png')),
+                  title: Text('Home'),
+                ),
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/icons/create.png')),
+                  activeIcon:
+                      ImageIcon(AssetImage('assets/icons/create_selected.png')),
+                  title: Text('Create'),
+                ),
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/icons/inbox.png')),
+                  title: Text('Inbox'),
+                ),
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/icons/settings.png')),
+                  activeIcon: ImageIcon(
+                      AssetImage('assets/icons/settings_selected.png')),
+                  title: Text('Settings'),
+                ),
+              ],
 
-            currentIndex: _selectedIndex,
-            selectedFontSize: 10,
-            unselectedFontSize: 10,
-            type: BottomNavigationBarType.fixed,
-            // unselectedIconTheme: ColorNames.colorLightGrey,
-            unselectedItemColor: Colors.black,
-            selectedItemColor: blue,
-            onTap: _onItemTapped,
+              currentIndex: _controller.selectedIndex.value,
+              selectedFontSize: 10,
+              unselectedFontSize: 10,
+              type: BottomNavigationBarType.fixed,
+              // unselectedIconTheme: ColorNames.colorLightGrey,
+              unselectedItemColor: Colors.black,
+              selectedItemColor: blue,
+              onTap: _onItemTapped,
+            ),
           ),
         ),
       ),

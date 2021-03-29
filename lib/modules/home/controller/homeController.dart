@@ -9,8 +9,10 @@ import 'package:brent/services/prefrences.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
+  var selectedIndex = 0.obs;
   var isLoggedIn = true.obs;
-  var selectedIndex = 1.obs;
+
+  // var selectedIndex = 1.obs;
   var isSwitched = false.obs;
   var expandFlag = false.obs;
   var logoutModel = StatusMessageModel().obs;
@@ -25,10 +27,11 @@ class HomeController extends GetxController {
   var totalPrice = 7500.obs;
   var ticketAmount = 7500;
 
-  onItemTapped(int index) {
-    selectedIndex.value = index;
-    update();
-  }
+  //
+  // onItemTapped(int index) {
+  //   selectedIndex.value = index;
+  //   update();
+  // }
 
   onLayoutCollapsed(bool value) {
     expandFlag.value = !value;
@@ -39,6 +42,10 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     getProfileData();
+  }
+
+  void changeRoute() {
+    selectedIndex.value = 0;
   }
 
   getProfileData() async {

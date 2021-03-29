@@ -13,6 +13,7 @@ class ProfileController extends GetxController {
   var updatePasswordModel = StatusMessageModel().obs;
   final _prefs = SharedPrefs();
   var showLoader = false.obs;
+  var showLoaderPic = false.obs;
 
   @override
   void onInit() {

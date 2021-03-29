@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:brent/modules/home/model/allUsersModel.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
 import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:brent/modules/login/model/userModel.dart';
@@ -194,6 +195,21 @@ class ApiController extends GetConnect {
       var data = response.body;
       print(data.toString());
       return homeModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to allUsers
+  Future<AllUsersModel> getAllUsers(String authCode) async {
+    final form = FormData({
+      'auth_code': authCode,
+    });
+    var response = await post("getAllusers", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return allUsersModelFromJson(response.body.toString());
     }
   }
 }

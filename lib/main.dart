@@ -3,6 +3,7 @@ import 'package:brent/modules/bookFlight/view/components/payment.dart';
 import 'package:brent/modules/firstPage/view/firstPage.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/controller/homePageController.dart';
+import 'package:brent/modules/home/controller/inboxController.dart';
 import 'package:brent/modules/home/view/components/home.dart';
 import 'package:brent/modules/profile/controller/profileController.dart';
 import 'package:brent/modules/profile/view/components/password.dart';
@@ -26,6 +27,7 @@ Future<void> main() async {
   final _controllerHome = Get.put(HomeController());
   final _controllerProfile = Get.put(ProfileController());
   final _controllerHomePage = Get.put(HomePageController());
+  final _controllerInboxPage = Get.put(InboxPageController());
   Widget _defaultHome = new FirstPage();
   bool _result = await appAuth.login();
   if (_result) {

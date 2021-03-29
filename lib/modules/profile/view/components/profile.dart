@@ -46,6 +46,7 @@ class _ProfileState extends State<ProfilePage> {
       addressController.text = _controllerHome.getProfile().address;
       cityController.text = _controllerHome.getProfile().city;
       zipCodeController.text = _controllerHome.getProfile().zipcode;
+      stateValue = _controllerHome.getProfile().state;
     }
   }
 
@@ -251,6 +252,9 @@ class _ProfileState extends State<ProfilePage> {
                                                 Icons.arrow_drop_down,
                                                 color: blue,
                                               ),
+                                              value: _controllerHome
+                                                  .getProfile()
+                                                  .state,
                                               decoration: InputDecoration(
                                                 hintText: "Please select state",
                                                 hintStyle:
@@ -399,7 +403,7 @@ class _ProfileState extends State<ProfilePage> {
                         ],
                       ),
                       Obx(
-                        () => !_controller.showLoader.value
+                        () => !_controller.showLoaderPic.value
                             ? Positioned(
                                 top: 15.0,
                                 // (background container size) - (circle height / 2)
@@ -433,7 +437,13 @@ class _ProfileState extends State<ProfilePage> {
                                   ),
                                 ),
                               )
-                            : Container(),
+                            : Positioned(
+                                top: 25.0,
+                                // (background container size) - (circle height / 2)
+                                child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: CircularProgressIndicator()),
+                              ),
                       ),
                       Positioned(
                         top: 16,
@@ -515,12 +525,16 @@ class _ProfileState extends State<ProfilePage> {
     if (croppedFile != null) {
       _controller.imageFile = croppedFile;
       _controller.state.value = AppState.cropped;
+      _controller.showLoader.value = true;
       _controllerHome.userModel.value =
           await _controllerHome.updateProfilePic(_controller.imageFile);
       if (_controllerHome.userModel().status == "true") {
+        _controller.showLoader.value = false;
         _clearImage();
         _prefs.saveProfile(jsonEncode(_controllerHome.userModel().profile));
         _controllerHome.getProfile.value = _controllerHome.userModel().profile;
+      } else {
+        _controller.showLoader.value = false;
       }
     }
   }

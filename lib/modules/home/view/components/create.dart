@@ -1,5 +1,6 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/home/controller/homePageController.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
 import 'package:brent/modules/login/model/userModel.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'home.dart';
 
 class CreatePage extends StatelessWidget {
   final HomeController _controller = Get.find();
+  final HomePageController _controllerHomePage = Get.find();
   final ScrollController _scrollController = new ScrollController();
   final dateController = new TextEditingController();
   final timeOfDepartureController = new TextEditingController();
@@ -20,6 +22,7 @@ class CreatePage extends StatelessWidget {
   TimeOfDay _selectedTimeArrival;
   String departingFrom = "";
   String goingTo = "";
+  final home = Home();
 
   @override
   Widget build(BuildContext context) {
@@ -414,7 +417,7 @@ class CreatePage extends StatelessWidget {
     CreateFlightModel createFlightModel = await _controller.createFlight(
         departingFrom,
         goingTo,
-        dateController.text,
+        DateFormat("yyyy/MM/dd HH:mm:ss").format(_selectedDate),
         timeOfDepartureController.text,
         timeOfArrivalController.text,
         oneWaySwitch);
@@ -422,7 +425,8 @@ class CreatePage extends StatelessWidget {
     if (createFlightModel.status == "true") {
       _controller.showLoaderCreate.value = false;
       Get.snackbar("Success", createFlightModel.msg);
-      Get.offAll(() => Home());
+      _controller.selectedIndex.value = 0;
+      _controllerHomePage.hitHomeApi();
     } else {
       _controller.showLoaderCreate.value = false;
       Get.snackbar("Error", createFlightModel.msg);

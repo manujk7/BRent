@@ -119,32 +119,34 @@ class SettingsPage extends StatelessWidget {
                   ],
                 ),
                 _controller.getProfile != null
-                    ? Positioned(
-                        top: 15.0,
-                        // (background container size) - (circle height / 2)
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 110.0,
-                            width: 110.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(_controller
-                                                .getProfile()
-                                                .profilePic !=
-                                            null &&
-                                        _controller
-                                            .getProfile()
-                                            .profilePic
-                                            .isNotEmpty
-                                    ? _controller.getProfile().profilePic
-                                    : "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
-                                fit: BoxFit.cover,
-                              ),
-                              border: Border.all(
-                                color: white,
-                                width: 5,
+                    ? Obx(
+                        () => Positioned(
+                          top: 15.0,
+                          // (background container size) - (circle height / 2)
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              height: 110.0,
+                              width: 110.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(_controller
+                                                  .getProfile()
+                                                  .profilePic !=
+                                              null &&
+                                          _controller
+                                              .getProfile()
+                                              .profilePic
+                                              .isNotEmpty
+                                      ? _controller.getProfile().profilePic
+                                      : "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
+                                  fit: BoxFit.cover,
+                                ),
+                                border: Border.all(
+                                  color: white,
+                                  width: 5,
+                                ),
                               ),
                             ),
                           ),
