@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:brent/modules/profile/view/components/profile.dart';
+import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:brent/services/apiController.dart';
 import 'package:brent/services/commonMessageStatusModel.dart';
 import 'package:brent/services/prefrences.dart';
@@ -14,9 +15,11 @@ class ProfileController extends GetxController {
   final _prefs = SharedPrefs();
   var showLoader = false.obs;
   var showLoaderPic = false.obs;
+  var statesModel = StatesModel().obs;
 
   @override
   void onInit() {
+    getAllStates();
     super.onInit();
   }
 
@@ -25,5 +28,9 @@ class ProfileController extends GetxController {
     String auth = await _prefs.getAuthCode();
     return updatePasswordModel.value =
         await ApiController().updatePassword(auth, oldPassword, newPassword);
+  }
+
+  Future<StatesModel> getAllStates() async {
+    return statesModel.value = await ApiController().getAllStates();
   }
 }

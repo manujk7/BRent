@@ -4,6 +4,7 @@ import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/view/components/home.dart';
 import 'package:brent/modules/login/model/userModel.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
+import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:brent/services/prefrences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -276,7 +277,7 @@ class SignUpPage extends StatelessWidget {
                       children: [
                         Flexible(
                           flex: 3,
-                          child: DropdownButtonFormField<String>(
+                          child: DropdownButtonFormField<dynamic>(
                             onChanged: (value) => stateValue = value,
                             icon: Icon(
                               Icons.arrow_drop_down,
@@ -294,16 +295,16 @@ class SignUpPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            items: <DropdownMenuItem<String>>[
-                              DropdownMenuItem<String>(
-                                value: "California",
-                                child: Text("California"),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: "Texas",
-                                child: Text("Texas"),
-                              ),
-                            ],
+                            items: _controller
+                                .statesModel()
+                                .state
+                                .map((States map) {
+                              return new DropdownMenuItem<String>(
+                                value: map.id,
+                                child: new Text(map.name,
+                                    style: new TextStyle(color: Colors.black)),
+                              );
+                            }).toList(),
                           ),
                         ),
                         SizedBox(

@@ -1,4 +1,5 @@
 import 'package:brent/modules/login/model/userModel.dart';
+import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:brent/services/apiController.dart';
 import 'package:get/get.dart';
 
@@ -8,10 +9,12 @@ class SignUpController extends GetxController {
   var isHiddenConfirm = true.obs;
   var showLoader = false.obs;
   var userModel = UserModel().obs;
+  var statesModel = StatesModel().obs;
 
   @override
   void onInit() {
     super.onInit();
+    getAllStates();
   }
 
   void togglePasswordView() {
@@ -44,5 +47,9 @@ class SignUpController extends GetxController {
         state,
         zipCode,
         referCode);
+  }
+
+  Future<StatesModel> getAllStates() async {
+    return statesModel.value = await ApiController().getAllStates();
   }
 }

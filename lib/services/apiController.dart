@@ -1,16 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:brent/modules/home/model/allUsersModel.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
 import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:brent/modules/login/model/userModel.dart';
+import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:get/get.dart';
-
 import 'commonMessageStatusModel.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
 class ApiController extends GetConnect {
   final baseUrl = "http://gendeep.com/dev/brent/Data_v1/";
@@ -210,6 +205,18 @@ class ApiController extends GetConnect {
       var data = response.body;
       print(data.toString());
       return allUsersModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to allUsers
+  Future<StatesModel> getAllStates() async {
+    var response = await get("getState");
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return statesModelFromJson(response.body.toString());
     }
   }
 }

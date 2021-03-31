@@ -4,6 +4,7 @@ import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/login/model/userModel.dart';
 import 'package:brent/modules/profile/controller/profileController.dart';
+import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:brent/services/prefrences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -245,7 +246,7 @@ class _ProfileState extends State<ProfilePage> {
                                             SizedBox(
                                               height: spacing * 1 / 2,
                                             ),
-                                            DropdownButtonFormField<String>(
+                                            DropdownButtonFormField<dynamic>(
                                               onChanged: (value) =>
                                                   stateValue = value,
                                               icon: Icon(
@@ -269,16 +270,16 @@ class _ProfileState extends State<ProfilePage> {
                                                   ),
                                                 ),
                                               ),
-                                              items: <DropdownMenuItem<String>>[
-                                                DropdownMenuItem<String>(
-                                                  value: "California",
-                                                  child: Text("California"),
-                                                ),
-                                                DropdownMenuItem<String>(
-                                                  value: "Texas",
-                                                  child: Text("Texas"),
-                                                ),
-                                              ],
+                                              items:  _controller
+                                                  .statesModel()
+                                                  .state
+                                                  .map((States map) {
+                                                return new DropdownMenuItem<String>(
+                                                  value: map.id,
+                                                  child: new Text(map.name,
+                                                      style: new TextStyle(color: Colors.black)),
+                                                );
+                                              }).toList(),
                                             ),
                                           ],
                                         ),
