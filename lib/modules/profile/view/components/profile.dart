@@ -231,7 +231,7 @@ class _ProfileState extends State<ProfilePage> {
                                   ),
                                   Row(
                                     children: [
-                                      Flexible(
+                                      Expanded(
                                         flex: 3,
                                         child: Column(
                                           crossAxisAlignment:
@@ -247,6 +247,7 @@ class _ProfileState extends State<ProfilePage> {
                                               height: spacing * 1 / 2,
                                             ),
                                             DropdownButtonFormField<dynamic>(
+                                              isExpanded: true,
                                               onChanged: (value) =>
                                                   stateValue = value,
                                               icon: Icon(
@@ -270,14 +271,18 @@ class _ProfileState extends State<ProfilePage> {
                                                   ),
                                                 ),
                                               ),
-                                              items:  _controller
+                                              items: _controller
                                                   .statesModel()
                                                   .state
                                                   .map((States map) {
-                                                return new DropdownMenuItem<String>(
+                                                return new DropdownMenuItem<
+                                                    String>(
                                                   value: map.id,
                                                   child: new Text(map.name,
-                                                      style: new TextStyle(color: Colors.black)),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: new TextStyle(
+                                                          color: Colors.black)),
                                                 );
                                               }).toList(),
                                             ),

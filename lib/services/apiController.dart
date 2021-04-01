@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:brent/modules/home/model/airportCodesModel.dart';
 import 'package:brent/modules/home/model/allUsersModel.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
 import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:brent/modules/login/model/userModel.dart';
+import 'package:brent/modules/shareApp/model/shareAppModel.dart';
 import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:get/get.dart';
 import 'commonMessageStatusModel.dart';
@@ -91,7 +93,9 @@ class ApiController extends GetConnect {
       String flightDate,
       String timeOfDeparture,
       String timeOfArrival,
-      String oneWaySwitch) async {
+      String oneWaySwitch,
+      String price,
+      String nSeats) async {
     final form = FormData({
       'auth_code': authCode,
       'from': from,
@@ -100,6 +104,8 @@ class ApiController extends GetConnect {
       'time_of_departure': timeOfDeparture,
       'time_of_arrival': timeOfArrival,
       'way': oneWaySwitch,
+      'price': price,
+      'seats': nSeats,
     });
     var response = await post("createFlight", form);
     if (!response.status.isOk) {
@@ -208,7 +214,7 @@ class ApiController extends GetConnect {
     }
   }
 
-  /// API call to allUsers
+  /// API call to States
   Future<StatesModel> getAllStates() async {
     var response = await get("getState");
     if (!response.status.isOk) {
@@ -217,6 +223,36 @@ class ApiController extends GetConnect {
       var data = response.body;
       print(data.toString());
       return statesModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to Airports
+  Future<AirportCodesModel> getSelectedFlight(String fromTo) async {
+    final form = FormData({
+      'fromto': fromTo,
+    });
+    var response = await post("selectFlight", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return airportCodesModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to shareCode
+  Future<ShareAppModel> getShareCode(String authCode) async {
+    final form = FormData({
+      'auth_code': authCode,
+    });
+    var response = await post("generatecode", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return shareAppModelFromJson(response.body.toString());
     }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stripe_payment/stripe_payment.dart';
@@ -17,6 +18,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Token _paymentToken;
   PaymentMethod _paymentMethod;
   String _error;
+  AllFlight data = Get.arguments[2];
 
   //this client secret is typically created by a backend system
   //check https://stripe.com/docs/payments/payment-intents#passing-to-client
@@ -104,7 +106,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               height: spacing * 1 / 2,
                             ),
                             Text(
-                              "New York to San Francisco",
+                              "${data.from} to ${data.to}",
                               style: Theme.of(context)
                                   .textTheme
                                   .headline5
@@ -113,7 +115,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                       fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "One-Way Deal",
+                              data.way == "1" ? "One-Way Deal" : "Two-Way Deal",
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
@@ -125,7 +127,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               height: spacing,
                             ),
                             Text(
-                              "Departing: 03/14/2021 (9:00 a.m.)",
+                              "Departing: ${Constants.getFormattedDate(data.flightDate)} (${data.timeOfDeparture}) ",
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
@@ -137,7 +139,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               height: spacing,
                             ),
                             Text(
-                              "Arriving: 03/14/2021 (3:00 p.m.)",
+                              "Arriving: ${Constants.getFormattedDate(data.flightDate)} (${data.timeOfArrival})",
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1

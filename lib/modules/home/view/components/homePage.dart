@@ -69,7 +69,8 @@ class _HomePageState extends State<HomePage> {
   Widget homeListView(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed('/bookFlightPage');
+        Get.toNamed('/bookFlightPage',
+            arguments: _controller.homeModel().allFlight[index]);
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
@@ -140,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             children: <TextSpan>[
                               new TextSpan(
-                                text: "\$7,500.00 ",
+                                text:
+                                    "\$${_controller.homeModel().allFlight[index].price} ",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               ),

@@ -16,7 +16,8 @@ import 'package:get/get.dart';
 import 'modules/invite/view/components/manageInvites.dart';
 import 'modules/login/controller/loginController.dart';
 import 'modules/login/view/loginPage.dart';
-import 'modules/other/shareApp.dart';
+import 'modules/shareApp/controller/shareAppController.dart';
+import 'modules/shareApp/view/components/shareApp.dart';
 
 SharedPrefs appAuth = new SharedPrefs();
 
@@ -28,6 +29,7 @@ Future<void> main() async {
   final _controllerProfile = Get.put(ProfileController());
   final _controllerHomePage = Get.put(HomePageController());
   final _controllerInboxPage = Get.put(InboxPageController());
+  final _shareAppController = Get.put(ShareAppController());
   Widget _defaultHome = new FirstPage();
   bool _result = await appAuth.login();
   if (_result) {

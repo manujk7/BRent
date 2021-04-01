@@ -1,5 +1,6 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:get/get.dart';
@@ -8,8 +9,15 @@ class BookFlightPage extends StatelessWidget {
   final HomeController _controller = Get.find();
   int passengers = 1;
 
+  AllFlight data;
+
   @override
   Widget build(BuildContext context) {
+    if (Get.arguments != null) {
+      data = Get.arguments;
+    }
+    _controller.ticketAmount = int.parse(data.price);
+    _controller.totalPrice.value = int.parse(data.price);
     return Scaffold(
       backgroundColor: background,
       appBar: new AppBar(
@@ -62,12 +70,12 @@ class BookFlightPage extends StatelessWidget {
                           height: spacing * 1 / 2,
                         ),
                         Text(
-                          "New York to San Francisco",
+                          "${data.from} to ${data.to}",
                           style: Theme.of(context).textTheme.headline5.copyWith(
                               color: Colors.black, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "One-Way Deal",
+                          data.way == "1" ? "One-Way Deal" : "Two-Way Deal",
                           style: Theme.of(context).textTheme.subtitle2.copyWith(
                                 color: orange,
                               ),
@@ -76,7 +84,7 @@ class BookFlightPage extends StatelessWidget {
                           height: spacing,
                         ),
                         Text(
-                          "Departing: 03/14/2021 (9:00 a.m.)",
+                          "Departing: ${Constants.getFormattedDate(data.flightDate)} (${data.timeOfDeparture}) ",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 color: Colors.black,
                               ),
@@ -85,7 +93,7 @@ class BookFlightPage extends StatelessWidget {
                           height: spacing,
                         ),
                         Text(
-                          "Arriving: 03/14/2021 (3:00 p.m.)",
+                          "Arriving: ${Constants.getFormattedDate(data.flightDate)} (${data.timeOfArrival})",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 color: Colors.black,
                               ),
@@ -94,7 +102,7 @@ class BookFlightPage extends StatelessWidget {
                           height: spacing,
                         ),
                         Text(
-                          "15 seats available",
+                          "${data.seats} seats available",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 color: Colors.black,
                               ),
@@ -107,7 +115,7 @@ class BookFlightPage extends StatelessWidget {
                           children: [
                             CustomNumberPicker(
                               initialValue: 1,
-                              maxValue: 10,
+                              maxValue: int.parse(data.seats),
                               minValue: 1,
                               step: 1,
                               valueTextStyle: TextStyle(fontSize: 16),
@@ -122,9 +130,6 @@ class BookFlightPage extends StatelessWidget {
                               ),
                               customAddButton: Row(
                                 children: [
-                                  new Divider(
-                                    color: Colors.red,
-                                  ),
                                   Container(
                                     width: Get.width * 1 / 8,
                                     height: 56.0,
@@ -241,7 +246,8 @@ class BookFlightPage extends StatelessWidget {
                             onTap: () {
                               Get.toNamed("/paymentPage", arguments: [
                                 passengers,
-                                _controller.totalPrice
+                                _controller.totalPrice,
+                                data
                               ]);
                             },
                             child: new Container(

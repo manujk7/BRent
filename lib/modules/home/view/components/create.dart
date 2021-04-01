@@ -1,18 +1,20 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/controller/homePageController.dart';
+import 'package:brent/modules/home/model/airportCodesModel.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
-import 'package:brent/modules/login/model/userModel.dart';
+import 'package:brent/modules/profile/controller/profileController.dart';
+import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import 'home.dart';
-
 class CreatePage extends StatelessWidget {
   final HomeController _controller = Get.find();
   final HomePageController _controllerHomePage = Get.find();
+  final ProfileController _controllerProfile = Get.find();
   final ScrollController _scrollController = new ScrollController();
   final dateController = new TextEditingController();
   final timeOfDepartureController = new TextEditingController();
@@ -22,7 +24,9 @@ class CreatePage extends StatelessWidget {
   TimeOfDay _selectedTimeArrival;
   String departingFrom = "";
   String goingTo = "";
-  final home = Home();
+  final priceController = new TextEditingController();
+  int passengers = 1;
+  String stateValue = "";
 
   @override
   Widget build(BuildContext context) {
@@ -79,66 +83,123 @@ class CreatePage extends StatelessWidget {
                     SizedBox(
                       height: spacing,
                     ),
-                    DropdownButtonFormField<String>(
-                      onChanged: (value) => departingFrom = value,
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: blue,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Departing from",
-                        hintStyle: TextStyle(fontSize: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: BorderSide(
-                            width: 0.1,
-                            style: BorderStyle.solid,
-                            color: borderBg,
-                          ),
-                        ),
-                      ),
-                      items: <DropdownMenuItem<String>>[
-                        DropdownMenuItem<String>(
-                          value: "California",
-                          child: Text("California"),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: "Texas",
-                          child: Text("Texas"),
-                        ),
-                      ],
+                    Obx(
+                      () => _controller.airportCodesModel != null &&
+                              _controller.airportCodesModel().airport != null
+                          ? DropdownButtonFormField<dynamic>(
+                              isExpanded: true,
+                              onChanged: (value) {
+                                stateValue = value;
+                              },
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                color: blue,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Departing from",
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                  borderSide: BorderSide(
+                                    width: 0.1,
+                                    style: BorderStyle.solid,
+                                    color: borderBg,
+                                  ),
+                                ),
+                              ),
+                              items: _controller
+                                  .airportCodesModel()
+                                  .airport
+                                  .map((Airport map) {
+                                return new DropdownMenuItem<String>(
+                                  value: map.id,
+                                  onTap: () {
+                                    departingFrom = map.fromTo;
+                                    if (departingFrom == goingTo) {
+                                      _controller.airportCodesModelFrom.value =
+                                          AirportCodesModel();
+                                    }
+                                    print(map.code);
+                                    _controller.getSelectedFlightFrom(map.code);
+                                  },
+                                  child: new Text(map.fromTo + " - " + map.code,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:
+                                          new TextStyle(color: Colors.black)),
+                                );
+                              }).toList(),
+                            )
+                          : Container(),
                     ),
                     SizedBox(
                       height: spacing,
                     ),
-                    DropdownButtonFormField<String>(
-                      onChanged: (value) => goingTo = value,
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: blue,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Going to",
-                        hintStyle: TextStyle(fontSize: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: BorderSide(
-                            width: 0.1,
-                            style: BorderStyle.solid,
-                            color: borderBg,
-                          ),
-                        ),
-                      ),
-                      items: <DropdownMenuItem<String>>[
-                        DropdownMenuItem<String>(
-                          value: "California",
-                          child: Text("California"),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: "Texas",
-                          child: Text("Texas"),
-                        ),
-                      ],
+                    Obx(
+                      () => _controller.airportCodesModelFrom != null &&
+                              _controller.airportCodesModelFrom().airport !=
+                                  null
+                          ? DropdownButtonFormField<String>(
+                              onChanged: (value) {
+                                // goingTo = value;
+                              },
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                color: blue,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Going to",
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                  borderSide: BorderSide(
+                                    width: 0.1,
+                                    style: BorderStyle.solid,
+                                    color: borderBg,
+                                  ),
+                                ),
+                              ),
+                              items: _controller
+                                  .airportCodesModelFrom()
+                                  .airport
+                                  .map((Airport map) {
+                                return new DropdownMenuItem<String>(
+                                  value: map.id,
+                                  onTap: () {
+                                    goingTo = map.fromTo;
+                                  },
+                                  child: new Text(map.fromTo + " - " + map.code,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:
+                                          new TextStyle(color: Colors.black)),
+                                );
+                              }).toList(),
+                            )
+                          : Container(
+                              child: TextField(
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.text,
+                                obscureText: false,
+                                onTap: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(new FocusNode());
+                                  Get.snackbar(
+                                      "Error", "Please select departing from");
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Going to",
+                                  hintStyle: TextStyle(fontSize: 16),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    borderSide: BorderSide(
+                                      width: 0.1,
+                                      style: BorderStyle.solid,
+                                      color: borderBg,
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.all(20),
+                                ),
+                              ),
+                            ),
                     ),
                     SizedBox(
                       height: spacing,
@@ -221,20 +282,101 @@ class CreatePage extends StatelessWidget {
                     SizedBox(
                       height: spacing,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "15 seats available",
-                          style: new TextStyle(
-                              fontSize: 18.0, color: Colors.black),
+                    Text(
+                      "Please select number of seats",
+                      style: new TextStyle(fontSize: 18.0, color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: spacing * 1 / 2,
+                    ),
+                    CustomNumberPicker(
+                      initialValue: 1,
+                      maxValue: 20,
+                      minValue: 1,
+                      step: 1,
+                      valueTextStyle: TextStyle(fontSize: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(6),
                         ),
-                        Text(
-                          "\$7,500.00 per seat",
-                          style: new TextStyle(
-                              fontSize: 18.0, color: Colors.black),
-                        )
-                      ],
+                        side: BorderSide(
+                          width: 0.5,
+                          color: lightGrey,
+                        ),
+                      ),
+                      customAddButton: Row(
+                        children: [
+                          Container(
+                            width: Get.width * 1 / 8,
+                            height: 56.0,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                left: BorderSide(color: lightGrey, width: 0.5),
+                              ),
+                            ),
+                            child: InkWell(
+                              child: new Container(
+                                width: Get.width * 0.4,
+                                child: new Center(
+                                  child: new Text(
+                                    "+",
+                                    style: new TextStyle(
+                                        fontSize: 32.0, color: blue),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      customMinusButton: Container(
+                        width: Get.width * 1 / 8,
+                        height: 56.0,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            right: BorderSide(color: lightGrey, width: 0.5),
+                          ),
+                        ),
+                        child: InkWell(
+                          child: new Container(
+                            width: Get.width * 0.4,
+                            child: new Center(
+                              child: new Text(
+                                "-",
+                                style:
+                                    new TextStyle(fontSize: 32.0, color: blue),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      onValue: (value) {
+                        // _controller.updateData(value);
+                        passengers = value;
+                        print(value.toString());
+                      },
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    TextField(
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.number,
+                      obscureText: false,
+                      controller: priceController,
+                      decoration: InputDecoration(
+                        hintText: "Price of ticket",
+                        hintStyle: TextStyle(fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: BorderSide(
+                            width: 0.1,
+                            style: BorderStyle.solid,
+                            color: borderBg,
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.all(20),
+                      ),
                     ),
                     SizedBox(
                       height: spacing,
@@ -386,12 +528,17 @@ class CreatePage extends StatelessWidget {
     }
 
     if (timeOfDepartureController.text.toString().trim().isEmpty) {
-      Get.snackbar("Error", "Please time of departure");
+      Get.snackbar("Error", "Please enter time of departure");
       return;
     }
 
     if (timeOfArrivalController.text.toString().trim().isEmpty) {
-      Get.snackbar("Error", "Please time of arrival");
+      Get.snackbar("Error", "Please enter time of arrival");
+      return;
+    }
+
+    if (priceController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Please enter price for ticket");
       return;
     }
 
@@ -420,7 +567,9 @@ class CreatePage extends StatelessWidget {
         DateFormat("yyyy/MM/dd HH:mm:ss").format(_selectedDate),
         timeOfDepartureController.text,
         timeOfArrivalController.text,
-        oneWaySwitch);
+        oneWaySwitch,
+        priceController.text.trim(),
+        passengers.toString());
 
     if (createFlightModel.status == "true") {
       _controller.showLoaderCreate.value = false;

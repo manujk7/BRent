@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^0.5.3+5
   intl: ^0.16.1
   flutter_sms: ^2.1.1
+  flutter_email_sender: ^4.0.0
 
 
 dev_dependencies:

@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:brent/modules/home/model/airportCodesModel.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
 import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:brent/modules/login/model/userModel.dart';
+import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:brent/services/apiController.dart';
 import 'package:brent/services/commonMessageStatusModel.dart';
 import 'package:brent/services/prefrences.dart';
@@ -24,8 +26,10 @@ class HomeController extends GetxController {
   var showHomeLoader = false.obs;
   var showLoaderCreate = false.obs;
   var getProfile = Profile().obs;
-  var totalPrice = 7500.obs;
-  var ticketAmount = 7500;
+  var totalPrice = 1.obs;
+  var ticketAmount = 1;
+  var airportCodesModel = AirportCodesModel().obs;
+  var airportCodesModelFrom = AirportCodesModel().obs;
 
   //
   // onItemTapped(int index) {
@@ -42,6 +46,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     getProfileData();
+    getSelectedFlight("");
   }
 
   void changeRoute() {
@@ -71,10 +76,20 @@ class HomeController extends GetxController {
       String flightDate,
       String timeOfDeparture,
       String timeOfArrival,
-      String oneWaySwitch) async {
+      String oneWaySwitch,
+      String price,
+      String nSeats) async {
     String auth = await _prefs.getAuthCode();
-    return createFlightModel.value = await ApiController().createFlight(auth,
-        from, to, flightDate, timeOfDeparture, timeOfArrival, oneWaySwitch);
+    return createFlightModel.value = await ApiController().createFlight(
+        auth,
+        from,
+        to,
+        flightDate,
+        timeOfDeparture,
+        timeOfArrival,
+        oneWaySwitch,
+        price,
+        nSeats);
   }
 
   Future<UserModel> getProfileApi(String deviceType, String deviceId) async {
@@ -106,5 +121,15 @@ class HomeController extends GetxController {
   updateData(int value) {
     totalPrice.value = ticketAmount * value;
     print(totalPrice.value);
+  }
+
+  Future<AirportCodesModel> getSelectedFlight(String fromTo) async {
+    return airportCodesModel.value =
+        await ApiController().getSelectedFlight(fromTo);
+  }
+
+  Future<AirportCodesModel> getSelectedFlightFrom(String fromTo) async {
+    return airportCodesModelFrom.value =
+        await ApiController().getSelectedFlight(fromTo);
   }
 }
