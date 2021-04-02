@@ -11,6 +11,8 @@ import 'package:brent/modules/profile/view/components/profile.dart';
 import 'package:brent/modules/signUp/controller/signUpController.dart';
 import 'package:brent/modules/signUp/view/components/signUpPage.dart';
 import 'package:brent/services/prefrences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'modules/invite/view/components/manageInvites.dart';
@@ -23,6 +25,7 @@ SharedPrefs appAuth = new SharedPrefs();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final _controller = Get.put(LoginController());
   final _controllerSignUp = Get.put(SignUpController());
   final _controllerHome = Get.put(HomeController());

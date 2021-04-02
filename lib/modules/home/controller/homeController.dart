@@ -4,7 +4,6 @@ import 'package:brent/modules/home/model/airportCodesModel.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
 import 'package:brent/modules/home/model/homeModel.dart';
 import 'package:brent/modules/login/model/userModel.dart';
-import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:brent/services/apiController.dart';
 import 'package:brent/services/commonMessageStatusModel.dart';
 import 'package:brent/services/prefrences.dart';
@@ -30,12 +29,6 @@ class HomeController extends GetxController {
   var ticketAmount = 1;
   var airportCodesModel = AirportCodesModel().obs;
   var airportCodesModelFrom = AirportCodesModel().obs;
-
-  //
-  // onItemTapped(int index) {
-  //   selectedIndex.value = index;
-  //   update();
-  // }
 
   onLayoutCollapsed(bool value) {
     expandFlag.value = !value;

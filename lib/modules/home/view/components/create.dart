@@ -3,19 +3,16 @@ import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/controller/homePageController.dart';
 import 'package:brent/modules/home/model/airportCodesModel.dart';
 import 'package:brent/modules/home/model/createFlightModel.dart';
-import 'package:brent/modules/profile/controller/profileController.dart';
-import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class CreatePage extends StatelessWidget {
   final HomeController _controller = Get.find();
   final HomePageController _controllerHomePage = Get.find();
-  final ProfileController _controllerProfile = Get.find();
-  final ScrollController _scrollController = new ScrollController();
   final dateController = new TextEditingController();
   final timeOfDepartureController = new TextEditingController();
   final timeOfArrivalController = new TextEditingController();
@@ -27,6 +24,7 @@ class CreatePage extends StatelessWidget {
   final priceController = new TextEditingController();
   int passengers = 1;
   String stateValue = "";
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   @override
   Widget build(BuildContext context) {
@@ -113,14 +111,15 @@ class CreatePage extends StatelessWidget {
                                   .map((Airport map) {
                                 return new DropdownMenuItem<String>(
                                   value: map.id,
-                                  onTap: () {
+                                  onTap: () async {
                                     departingFrom = map.fromTo;
                                     if (departingFrom == goingTo) {
                                       _controller.airportCodesModelFrom.value =
                                           AirportCodesModel();
                                     }
                                     print(map.code);
-                                    _controller.getSelectedFlightFrom(map.code);
+                                    var airportCodesModel = await _controller
+                                        .getSelectedFlightFrom(map.code);
                                   },
                                   child: new Text(map.fromTo + " - " + map.code,
                                       overflow: TextOverflow.ellipsis,
@@ -479,7 +478,8 @@ class CreatePage extends StatelessWidget {
       _selectedTimeDeparture = newSelectedTime;
       final localizations = MaterialLocalizations.of(context);
       timeOfDepartureController
-        ..text = localizations.formatTimeOfDay(_selectedTimeDeparture)
+        ..text = localizations.formatTimeOfDay(_selectedTimeDeparture,
+            alwaysUse24HourFormat: false)
         ..selection = TextSelection.fromPosition(TextPosition(
             offset: timeOfDepartureController.text.length,
             affinity: TextAffinity.upstream));
@@ -511,7 +511,8 @@ class CreatePage extends StatelessWidget {
       _selectedTimeArrival = newSelectedTime;
       final localizations = MaterialLocalizations.of(context);
       timeOfArrivalController
-        ..text = localizations.formatTimeOfDay(_selectedTimeArrival)
+        ..text = localizations.formatTimeOfDay(_selectedTimeArrival,
+            alwaysUse24HourFormat: false)
         ..selection = TextSelection.fromPosition(TextPosition(
             offset: timeOfArrivalController.text.length,
             affinity: TextAffinity.upstream));

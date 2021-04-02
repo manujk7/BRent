@@ -346,7 +346,7 @@ class SignUpPage extends StatelessWidget {
                       focusNode: focusReferral,
                       onSubmitted: (v) {},
                       decoration: InputDecoration(
-                        hintText: "Referral code (optional)",
+                        hintText: "Referral code",
                         hintStyle: TextStyle(fontSize: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),

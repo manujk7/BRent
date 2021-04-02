@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
@@ -7,6 +8,7 @@ import 'package:brent/modules/home/view/components/homePage.dart';
 import 'package:brent/modules/home/view/components/inbox.dart';
 import 'package:brent/modules/home/view/components/settings.dart';
 import 'package:brent/services/prefrences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'homePage.dart';
@@ -25,19 +27,210 @@ class _HomeState extends State<Home> {
   String deviceId = "123";
   String deviceType = "";
   final _prefs = SharedPrefs();
+  final _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     super.initState();
     getProfile();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+        // var jj = json.decode(message.toString());
+        if (message.containsKey("aps")) {
+          var body = message['aps']['alert']['body'];
+          var title = message['aps']['alert']['title'];
+          var body1 = body;
+          if (title == null || title == "null") {
+            title = "Alert!";
+          }
+          showDialogPush(title, body);
+        } else {
+          var body = message['notification']['body'];
+          var title = message['notification']['title'];
+          var body1 = body;
+          if (title == null || title == "null") {
+            title = "Alert!";
+          }
+          showDialogPush(title, body);
+        }
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print(message);
+//        Navigator.push(
+//          context,
+//          CupertinoPageRoute(
+//            builder: (context) => NotificationsPage(),
+//          ),
+//        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print(message);
+//        Navigator.push(
+//          context,
+//          CupertinoPageRoute(
+//            builder: (context) => NotificationsPage(),
+//          ),
+//        );
+      },
+    );
+  }
+
+  void showDialogPush(String title, String body) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return Center(
+            child: SingleChildScrollView(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: AlertDialog(
+                  backgroundColor: Colors.white,
+                  contentPadding: EdgeInsets.only(
+                    left: 0,
+                    right: 0,
+                    top: 40,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  elevation: 0,
+                  content: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.only(
+                                  top: 12,
+                                  left: 24,
+                                  right: 24,
+                                ),
+                                // margin: EdgeInsets.all(20),
+                                child: Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: grey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.only(
+                                  top: 12,
+                                  bottom: 12,
+                                  left: 24,
+                                  right: 24,
+                                ),
+                                // margin: EdgeInsets.all(20),
+                                child: Text(
+                                  body,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: lightGrey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 15,
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  Constants.hideKeyBoard();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(80)),
+                                    color: blue,
+                                  ),
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.only(
+                                    top: 12,
+                                    bottom: 12,
+                                    left: 24,
+                                    right: 24,
+                                  ),
+                                  margin: EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                    bottom: 12,
+                                    top: 12,
+                                  ),
+                                  child: Text(
+                                    "okay",
+                                    style: TextStyle(
+                                      color: lightGrey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: blue,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: white,
+                    width: 3,
+                  ),
+                ),
+                // child: ImageIcon(
+                //   AssetImage('assets/icons/ic_reward.png'),
+                //   color: white,
+                // ),
+              ),
+            ],
+          ),
+        ));
+      },
+    );
+  }
+
+  void iosPermission() {
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
   }
 
   Future<void> getProfile() async {
-    if (GetPlatform.isIOS) {
-      deviceType = "2";
-    } else {
-      deviceType = "1";
-    }
+    if (Platform.isIOS) iosPermission();
+    _firebaseMessaging.getToken().then((token) {
+      print("TTTTOOOKKEEENNNZZZZZZZZZZZZ : " + token);
+      deviceId = token;
+      if (Platform.isIOS) {
+        deviceType = "2";
+      } else {
+        deviceType = "1";
+      }
+    });
     _controller.userModel.value =
         await _controller.getProfileApi(deviceType, deviceId);
     if (_controller.userModel().status == "true") {
