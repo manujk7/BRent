@@ -36,7 +36,8 @@ class AllFlight {
     this.way,
     this.from,
     this.to,
-    this.flightDate,
+    this.flightDepartureDate,
+    this.arrivalDate,
     this.timeOfDeparture,
     this.timeOfArrival,
     this.price,
@@ -50,7 +51,8 @@ class AllFlight {
   String way;
   String from;
   String to;
-  String flightDate;
+  String flightDepartureDate;
+  String arrivalDate;
   String timeOfDeparture;
   String timeOfArrival;
   String price;
@@ -64,7 +66,8 @@ class AllFlight {
         way: json["way"],
         from: json["from"],
         to: json["to"],
-        flightDate: json["flight_date"],
+        flightDepartureDate: json["flight_date"],
+        arrivalDate: json["arrival_date"],
         timeOfDeparture: json["time_of_departure"],
         timeOfArrival: json["time_of_arrival"],
         price: json["price"],
@@ -79,7 +82,8 @@ class AllFlight {
         "way": way,
         "from": from,
         "to": to,
-        "flight_date": flightDate,
+        "flight_date": flightDepartureDate,
+        "arrivalDate": arrivalDate,
         "time_of_departure": timeOfDeparture,
         "time_of_arrival": timeOfArrival,
         "price": price,

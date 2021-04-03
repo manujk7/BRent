@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         Get.toNamed('/bookFlightPage',
-            arguments: _controller.homeModel().allFlight[index]);
+            arguments: ["1", _controller.homeModel().allFlight[index]]);
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${Constants.getFormattedDate(_controller.homeModel().allFlight[index].flightDate)} (${_controller.homeModel().allFlight[index].timeOfDeparture}) ",
+                          "${Constants.getFormattedDate(_controller.homeModel().allFlight[index].flightDepartureDate)} (${_controller.homeModel().allFlight[index].timeOfDeparture}) ",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 color: Colors.black,
                               ),
@@ -157,21 +157,50 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: spacing,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        _controller
-                            .onLayoutCollapsed(_controller.expandFlag.value);
-                      },
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                          "View Invitees",
-                          style: Theme.of(context).textTheme.headline5.copyWith(
-                                color: blue,
-                                fontWeight: FontWeight.bold,
-                              ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed("/invitePage",
+                                arguments:
+                                    _controller.homeModel().allFlight[index]);
+                          },
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              "Manage Invitees",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(
+                                    color: blue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
                         ),
-                      ),
+                        GestureDetector(
+                          onTap: () {
+                            _controller.onLayoutCollapsed(
+                                _controller.expandFlag.value);
+                          },
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              "View Invitees",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(
+                                    color: blue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: spacing,

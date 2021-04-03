@@ -66,23 +66,25 @@ class HomeController extends GetxController {
   Future<CreateFlightModel> createFlight(
       String from,
       String to,
-      String flightDate,
+      String flightDateDeparture,
       String timeOfDeparture,
       String timeOfArrival,
       String oneWaySwitch,
       String price,
-      String nSeats) async {
+      String nSeats,
+      String dateOfArrival) async {
     String auth = await _prefs.getAuthCode();
     return createFlightModel.value = await ApiController().createFlight(
         auth,
         from,
         to,
-        flightDate,
+        flightDateDeparture,
         timeOfDeparture,
         timeOfArrival,
         oneWaySwitch,
         price,
-        nSeats);
+        nSeats,
+        dateOfArrival);
   }
 
   Future<UserModel> getProfileApi(String deviceType, String deviceId) async {

@@ -1,3 +1,4 @@
+import 'package:brent/modules/bookFlight/controller/bookFlightController.dart';
 import 'package:brent/modules/bookFlight/view/components/bookFlight.dart';
 import 'package:brent/modules/bookFlight/view/components/payment.dart';
 import 'package:brent/modules/firstPage/view/firstPage.dart';
@@ -5,6 +6,7 @@ import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/controller/homePageController.dart';
 import 'package:brent/modules/home/controller/inboxController.dart';
 import 'package:brent/modules/home/view/components/home.dart';
+import 'package:brent/modules/invite/controller/inviteController.dart';
 import 'package:brent/modules/profile/controller/profileController.dart';
 import 'package:brent/modules/profile/view/components/password.dart';
 import 'package:brent/modules/profile/view/components/profile.dart';
@@ -33,6 +35,8 @@ Future<void> main() async {
   final _controllerHomePage = Get.put(HomePageController());
   final _controllerInboxPage = Get.put(InboxPageController());
   final _shareAppController = Get.put(ShareAppController());
+  final _inviteController = Get.put(InviteController());
+  final _bookFlightController = Get.put(BookFlightController());
   Widget _defaultHome = new FirstPage();
   bool _result = await appAuth.login();
   if (_result) {

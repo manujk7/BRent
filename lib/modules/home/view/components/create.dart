@@ -13,10 +13,12 @@ import 'package:intl/intl.dart';
 class CreatePage extends StatelessWidget {
   final HomeController _controller = Get.find();
   final HomePageController _controllerHomePage = Get.find();
-  final dateController = new TextEditingController();
+  final departureDateController = new TextEditingController();
+  final arrivalDateController = new TextEditingController();
   final timeOfDepartureController = new TextEditingController();
   final timeOfArrivalController = new TextEditingController();
-  DateTime _selectedDate;
+  DateTime _selectedDateDeparture;
+  DateTime _selectedDateArrival;
   TimeOfDay _selectedTimeDeparture;
   TimeOfDay _selectedTimeArrival;
   String departingFrom = "";
@@ -24,7 +26,6 @@ class CreatePage extends StatelessWidget {
   final priceController = new TextEditingController();
   int passengers = 1;
   String stateValue = "";
-  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   @override
   Widget build(BuildContext context) {
@@ -207,13 +208,39 @@ class CreatePage extends StatelessWidget {
                       textAlign: TextAlign.start,
                       keyboardType: TextInputType.datetime,
                       obscureText: false,
-                      controller: dateController,
+                      controller: departureDateController,
                       onTap: () {
                         FocusScope.of(context).requestFocus(new FocusNode());
-                        _selectDate(context);
+                        _selectDateDeparture(context);
                       },
                       decoration: InputDecoration(
-                        hintText: "Date",
+                        hintText: "Date of Departure",
+                        hintStyle: TextStyle(fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: BorderSide(
+                            width: 0.1,
+                            style: BorderStyle.solid,
+                            color: borderBg,
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.all(20),
+                      ),
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    TextField(
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.datetime,
+                      obscureText: false,
+                      controller: arrivalDateController,
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        _selectDateArrival(context);
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Date of Arrival",
                         hintStyle: TextStyle(fontSize: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
@@ -423,10 +450,12 @@ class CreatePage extends StatelessWidget {
     );
   }
 
-  _selectDate(BuildContext context) async {
+  _selectDateDeparture(BuildContext context) async {
     DateTime newSelectedDate = await showDatePicker(
         context: context,
-        initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
+        initialDate: _selectedDateDeparture != null
+            ? _selectedDateDeparture
+            : DateTime.now(),
         firstDate: DateTime.now(),
         lastDate: DateTime(2040),
         builder: (BuildContext context, Widget child) {
@@ -445,11 +474,44 @@ class CreatePage extends StatelessWidget {
         });
 
     if (newSelectedDate != null) {
-      _selectedDate = newSelectedDate;
-      dateController
-        ..text = DateFormat("MM/dd/yyyy").format(_selectedDate)
+      _selectedDateDeparture = newSelectedDate;
+      departureDateController
+        ..text = DateFormat("MM/dd/yyyy").format(_selectedDateDeparture)
         ..selection = TextSelection.fromPosition(TextPosition(
-            offset: dateController.text.length,
+            offset: departureDateController.text.length,
+            affinity: TextAffinity.upstream));
+    }
+  }
+
+  _selectDateArrival(BuildContext context) async {
+    DateTime newSelectedDate = await showDatePicker(
+        context: context,
+        initialDate: _selectedDateArrival != null
+            ? _selectedDateArrival
+            : DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2040),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: ColorScheme.dark(
+                primary: blue,
+                onPrimary: white,
+                surface: grey,
+                onSurface: white,
+              ),
+              dialogBackgroundColor: textGrey,
+            ),
+            child: child,
+          );
+        });
+
+    if (newSelectedDate != null) {
+      _selectedDateArrival = newSelectedDate;
+      arrivalDateController
+        ..text = DateFormat("MM/dd/yyyy").format(_selectedDateArrival)
+        ..selection = TextSelection.fromPosition(TextPosition(
+            offset: arrivalDateController.text.length,
             affinity: TextAffinity.upstream));
     }
   }
@@ -523,8 +585,13 @@ class CreatePage extends StatelessWidget {
   /// Method that handles click of create button
   /// ------------------------------------------------------------
   Future<void> createFlightLogic() async {
-    if (dateController.text.toString().trim().isEmpty) {
-      Get.snackbar("Error", "Please enter date");
+    if (departureDateController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Please enter departture date");
+      return;
+    }
+
+    if (arrivalDateController.text.toString().trim().isEmpty) {
+      Get.snackbar("Error", "Please enter arrival date");
       return;
     }
 
@@ -563,14 +630,16 @@ class CreatePage extends StatelessWidget {
     _controller.showLoaderCreate.value = true;
 
     CreateFlightModel createFlightModel = await _controller.createFlight(
-        departingFrom,
-        goingTo,
-        DateFormat("yyyy/MM/dd HH:mm:ss").format(_selectedDate),
-        timeOfDepartureController.text,
-        timeOfArrivalController.text,
-        oneWaySwitch,
-        priceController.text.trim(),
-        passengers.toString());
+      departingFrom,
+      goingTo,
+      DateFormat("yyyy/MM/dd HH:mm:ss").format(_selectedDateDeparture),
+      timeOfDepartureController.text,
+      timeOfArrivalController.text,
+      oneWaySwitch,
+      priceController.text.trim(),
+      passengers.toString(),
+      DateFormat("yyyy/MM/dd HH:mm:ss").format(_selectedDateArrival),
+    );
 
     if (createFlightModel.status == "true") {
       _controller.showLoaderCreate.value = false;

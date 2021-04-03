@@ -23,7 +23,7 @@ const String dummyPlaneHome = 'assets/images/imagePlane.png';
 
 class Constants {
   static DateFormat dateFormat = DateFormat("MM/dd/yyyy");
-  static DateFormat dateFormatParse = DateFormat("yyyy-MM-dd HH:mm:ss");
+  static DateFormat dateFormatParse = DateFormat("yyyy-MM-dd");
 
   //Function to hide KeyBoard--------------------
   //---------------------------------------------

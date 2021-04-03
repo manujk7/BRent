@@ -95,7 +95,8 @@ class ApiController extends GetConnect {
       String timeOfArrival,
       String oneWaySwitch,
       String price,
-      String nSeats) async {
+      String nSeats,
+      String dateOfArrival) async {
     final form = FormData({
       'auth_code': authCode,
       'from': from,
@@ -106,6 +107,7 @@ class ApiController extends GetConnect {
       'way': oneWaySwitch,
       'price': price,
       'seats': nSeats,
+      'arrival_date': dateOfArrival,
     });
     var response = await post("createFlight", form);
     if (!response.status.isOk) {
@@ -253,6 +255,24 @@ class ApiController extends GetConnect {
       var data = response.body;
       print(data.toString());
       return shareAppModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to create notification
+  Future<StatusMessageModel> createNotification(
+      String authCode, String email, String bookingId) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'email': email,
+      'booking_id': bookingId,
+    });
+    var response = await post("invites", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return statusMessageModelFromJson(response.body.toString());
     }
   }
 }

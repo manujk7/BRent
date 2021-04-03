@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "104526349380",
+    "project_id": "loop-ed291",
+    "storage_bucket": "loop-ed291.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104526349380:android:a41e6f21e65b18bc44a811",
+        "android_client_info": {
+          "package_name": "com.app.brent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104526349380-cta48044o3iiq0j99o3li9n4534es4d2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADgaEJu5CzAbQ50nmw2qVjuZ3a23r74Us"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104526349380-cta48044o3iiq0j99o3li9n4534es4d2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "104526349380-6tv0m5ob3fbu0p7n21qu6ojs4om7tsp0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.brent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

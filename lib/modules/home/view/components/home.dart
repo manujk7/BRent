@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
 import 'package:brent/modules/home/view/components/create.dart';
@@ -10,6 +9,7 @@ import 'package:brent/modules/home/view/components/settings.dart';
 import 'package:brent/services/prefrences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'homePage.dart';
 
@@ -37,41 +37,18 @@ class _HomeState extends State<Home> {
       onMessage: (Map<String, dynamic> message) async {
         print('on message $message');
         // var jj = json.decode(message.toString());
-        if (message.containsKey("aps")) {
-          var body = message['aps']['alert']['body'];
-          var title = message['aps']['alert']['title'];
-          var body1 = body;
-          if (title == null || title == "null") {
-            title = "Alert!";
-          }
-          showDialogPush(title, body);
-        } else {
-          var body = message['notification']['body'];
-          var title = message['notification']['title'];
-          var body1 = body;
-          if (title == null || title == "null") {
-            title = "Alert!";
-          }
-          showDialogPush(title, body);
+        var body = message['notification']['body'];
+        var title = message['notification']['title'];
+        if (title == null || title == "null") {
+          title = "Invite!";
         }
+        showDialogPush(title, body);
       },
       onResume: (Map<String, dynamic> message) async {
         print(message);
-//        Navigator.push(
-//          context,
-//          CupertinoPageRoute(
-//            builder: (context) => NotificationsPage(),
-//          ),
-//        );
       },
       onLaunch: (Map<String, dynamic> message) async {
         print(message);
-//        Navigator.push(
-//          context,
-//          CupertinoPageRoute(
-//            builder: (context) => NotificationsPage(),
-//          ),
-//        );
       },
     );
   }
@@ -119,7 +96,7 @@ class _HomeState extends State<Home> {
                                 child: Text(
                                   title,
                                   style: TextStyle(
-                                    color: grey,
+                                    color: Colors.black,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -137,7 +114,7 @@ class _HomeState extends State<Home> {
                                   body,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: lightGrey,
+                                    color: Colors.black,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -146,9 +123,10 @@ class _HomeState extends State<Home> {
                                 height: 15,
                               ),
                               GestureDetector(
-                                onTap: () async {
-                                  Constants.hideKeyBoard();
+                                onTap: () {
                                   Navigator.of(context).pop();
+                                  Get.toNamed('/bookFlightPage',
+                                      arguments: ["2", ""]);
                                 },
                                 child: Container(
                                   height: 40,
@@ -173,7 +151,7 @@ class _HomeState extends State<Home> {
                                   child: Text(
                                     "okay",
                                     style: TextStyle(
-                                      color: lightGrey,
+                                      color: white,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -188,22 +166,18 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(20),
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: blue,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: white,
-                    width: 3,
+                  padding: EdgeInsets.all(20),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: borderBg,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: white,
+                      width: 3,
+                    ),
                   ),
-                ),
-                // child: ImageIcon(
-                //   AssetImage('assets/icons/ic_reward.png'),
-                //   color: white,
-                // ),
-              ),
+                  child: SvgPicture.asset('assets/notification.svg')),
             ],
           ),
         ));
@@ -222,7 +196,7 @@ class _HomeState extends State<Home> {
 
   Future<void> getProfile() async {
     if (Platform.isIOS) iosPermission();
-    _firebaseMessaging.getToken().then((token) {
+    _firebaseMessaging.getToken().then((token) async {
       print("TTTTOOOKKEEENNNZZZZZZZZZZZZ : " + token);
       deviceId = token;
       if (Platform.isIOS) {
@@ -230,12 +204,13 @@ class _HomeState extends State<Home> {
       } else {
         deviceType = "1";
       }
+      _controller.userModel.value =
+          await _controller.getProfileApi(deviceType, deviceId);
+      if (_controller.userModel().status == "true") {
+        _prefs.saveProfile(jsonEncode(_controller.userModel().profile));
+      }
     });
-    _controller.userModel.value =
-        await _controller.getProfileApi(deviceType, deviceId);
-    if (_controller.userModel().status == "true") {
-      _prefs.saveProfile(jsonEncode(_controller.userModel().profile));
-    }
+
     _controller.getProfileData();
   }
 

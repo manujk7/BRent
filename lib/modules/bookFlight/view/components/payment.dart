@@ -127,7 +127,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               height: spacing,
                             ),
                             Text(
-                              "Departing: ${Constants.getFormattedDate(data.flightDate)} (${data.timeOfDeparture}) ",
+                              "Departing: ${Constants.getFormattedDate(data.flightDepartureDate)} (${data.timeOfDeparture}) ",
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
@@ -139,7 +139,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               height: spacing,
                             ),
                             Text(
-                              "Arriving: ${Constants.getFormattedDate(data.flightDate)} (${data.timeOfArrival})",
+                              "Arriving: ${Constants.getFormattedDate(data.arrivalDate)} (${data.timeOfArrival})",
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1

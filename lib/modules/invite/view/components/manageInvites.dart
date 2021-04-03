@@ -1,14 +1,22 @@
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/home/controller/inboxController.dart';
+import 'package:brent/modules/home/model/homeModel.dart';
+import 'package:brent/modules/invite/controller/inviteController.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:get/get.dart';
 
 class ManageInvitePage extends StatelessWidget {
-  final HomeController _controller = Get.find();
+  final HomeController _controllerHome = Get.find();
+  final InboxPageController _controller = Get.find();
+  final InviteController _controllerInvite = Get.find();
+  AllFlight data;
 
   @override
   Widget build(BuildContext context) {
+    if (Get.arguments != null) {
+      data = Get.arguments;
+    }
     return Scaffold(
       backgroundColor: background,
       appBar: new AppBar(
@@ -64,7 +72,7 @@ class ManageInvitePage extends StatelessWidget {
                                       EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
                                   child: new ListTile(
                                     title: new Text(
-                                      "Cool $index",
+                                      "${_controllerHome.getProfile().name}",
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
@@ -75,8 +83,18 @@ class ManageInvitePage extends StatelessWidget {
                                       decoration: new BoxDecoration(
                                         color: const Color(0xff7c94b6),
                                         image: new DecorationImage(
-                                          image: new NetworkImage(
-                                              'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
+                                          image: new NetworkImage(_controllerHome
+                                                          .getProfile()
+                                                          .profilePic !=
+                                                      null &&
+                                                  _controllerHome
+                                                      .getProfile()
+                                                      .profilePic
+                                                      .isNotEmpty
+                                              ? _controllerHome
+                                                  .getProfile()
+                                                  .profilePic
+                                              : "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"),
                                           fit: BoxFit.cover,
                                         ),
                                         borderRadius: new BorderRadius.all(
@@ -103,47 +121,105 @@ class ManageInvitePage extends StatelessWidget {
                                 fontSize: 16,
                               ),
                             ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              primary: false,
-                              itemBuilder: (BuildContext context, int index) {
-                                return new Container(
-                                  padding:
-                                      EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
-                                  child: new ListTile(
-                                    title: new Text(
-                                      "Cool $index",
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    leading: Container(
-                                      width: 60.0,
-                                      height: 60.0,
-                                      decoration: new BoxDecoration(
-                                        color: const Color(0xff7c94b6),
-                                        image: new DecorationImage(
-                                          image: new NetworkImage(
-                                              'https://miro.medium.com/max/560/1*MccriYX-ciBniUzRKAUsAw.png'),
-                                          fit: BoxFit.cover,
+                            _controller.getAllUsersModel().allusers != null &&
+                                    _controller
+                                            .getAllUsersModel()
+                                            .allusers
+                                            .length >
+                                        0
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return new Container(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 4.0, 0.0, 4.0),
+                                        child: new ListTile(
+                                          onTap: () {
+                                            showAlert(Get.context);
+                                          },
+                                          title: new Text(
+                                            "${_controller.getAllUsersModel().allusers[index].name}",
+                                            style: new TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          leading: Container(
+                                            width: 60.0,
+                                            height: 60.0,
+                                            decoration: new BoxDecoration(
+                                              color: const Color(0xff7c94b6),
+                                              image: new DecorationImage(
+                                                image: new NetworkImage(_controller
+                                                        .getAllUsersModel()
+                                                        .allusers[index]
+                                                        .profilePic
+                                                        .isEmpty
+                                                    ? "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"
+                                                    : _controller
+                                                        .getAllUsersModel()
+                                                        .allusers[index]
+                                                        .profilePic),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: new BorderRadius
+                                                      .all(
+                                                  new Radius.circular(50.0)),
+                                              border: new Border.all(
+                                                color: white,
+                                                width: 4.0,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                        borderRadius: new BorderRadius.all(
-                                            new Radius.circular(50.0)),
-                                        border: new Border.all(
-                                          color: white,
-                                          width: 4.0,
-                                        ),
+                                      );
+                                    },
+                                    itemCount: _controller
+                                        .getAllUsersModel()
+                                        .allusers
+                                        .length,
+                                  )
+                                : Container(
+                                    child: Center(
+                                      child: Text(
+                                        "No data found..",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            .copyWith(
+                                              color: orange,
+                                            ),
                                       ),
                                     ),
                                   ),
-                                );
-                              },
-                              itemCount: 3,
-                            ),
                             SizedBox(
                               height: spacing,
                             ),
-                            customButton(context, "Done", blue, 1, "/home"),
+                            Container(
+                              width: Get.width * 1,
+                              height: 56.0,
+                              decoration: new BoxDecoration(
+                                color: blue,
+                                border: new Border.all(color: blue, width: 2.0),
+                                borderRadius: new BorderRadius.circular(6.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: new Container(
+                                  width: Get.width * 0.4,
+                                  child: new Center(
+                                    child: new Text(
+                                      "Done",
+                                      style: new TextStyle(
+                                          fontSize: 18.0, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                             SizedBox(
                               height: spacing,
                             ),
@@ -200,7 +276,7 @@ class ManageInvitePage extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  Get.toNamed("/home");
+                                  // Navigator.pop(context);
                                 },
                                 child: new Container(
                                   width: Get.width * 0.4,
@@ -228,6 +304,34 @@ class ManageInvitePage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Invite'),
+          content: Text("Are you sure you want to invite this user?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Yes"),
+              onPressed: () {
+                _controllerInvite.createNotification(
+                    "${_controllerHome.getProfile().email}", data.id);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
