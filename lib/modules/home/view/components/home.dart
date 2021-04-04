@@ -39,10 +39,16 @@ class _HomeState extends State<Home> {
         // var jj = json.decode(message.toString());
         var body = message['notification']['body'];
         var title = message['notification']['title'];
+        var bookingId = message['booking_id'];
+
+        if(bookingId == null || bookingId == "null"){
+          bookingId = "";
+        }
+
         if (title == null || title == "null") {
           title = "Invite!";
         }
-        showDialogPush(title, body);
+        showDialogPush(title, body, bookingId);
       },
       onResume: (Map<String, dynamic> message) async {
         print(message);
@@ -53,7 +59,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void showDialogPush(String title, String body) {
+  void showDialogPush(String title, String body, String bookingId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -126,7 +132,7 @@ class _HomeState extends State<Home> {
                                 onTap: () {
                                   Navigator.of(context).pop();
                                   Get.toNamed('/bookFlightPage',
-                                      arguments: ["2", ""]);
+                                      arguments: ["2", bookingId]);
                                 },
                                 child: Container(
                                   height: 40,

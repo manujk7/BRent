@@ -325,7 +325,7 @@ class BookFlightPage extends StatelessWidget {
   }
 
   Future<void> hitApi() async {
-    await _controller.getFlightData();
+    await _controller.getFlightData(Get.arguments[1]);
     _controllerHome.ticketAmount = int.parse(_controller.data().price);
     _controllerHome.totalPrice.value = int.parse(_controller.data().price);
   }

@@ -137,7 +137,12 @@ class ManageInvitePage extends StatelessWidget {
                                             0.0, 4.0, 0.0, 4.0),
                                         child: new ListTile(
                                           onTap: () {
-                                            showAlert(Get.context);
+                                            showAlert(
+                                                Get.context,
+                                                _controller
+                                                    .getAllUsersModel()
+                                                    .allusers[index]
+                                                    .email);
                                           },
                                           title: new Text(
                                             "${_controller.getAllUsersModel().allusers[index].name}",
@@ -307,7 +312,7 @@ class ManageInvitePage extends StatelessWidget {
     );
   }
 
-  showAlert(BuildContext context) {
+  showAlert(BuildContext context, String email) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -324,8 +329,8 @@ class ManageInvitePage extends StatelessWidget {
             TextButton(
               child: Text("Yes"),
               onPressed: () {
-                _controllerInvite.createNotification(
-                    "${_controllerHome.getProfile().email}", data.id);
+                hitApi(email);
+
                 Navigator.of(context).pop();
               },
             ),
@@ -333,5 +338,15 @@ class ManageInvitePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  hitApi(String email) async {
+    var statusMessageModel =
+        await _controllerInvite.createNotification("$email", data.id);
+    if (statusMessageModel.status == "true") {
+      Get.snackbar("Sent", statusMessageModel.msg);
+    } else {
+      Get.snackbar("Error", statusMessageModel.msg);
+    }
   }
 }

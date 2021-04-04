@@ -201,6 +201,22 @@ class ApiController extends GetConnect {
     }
   }
 
+  /// API call to homeData
+  Future<HomeModel> homeBookingId(String authCode, String bookingId) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'booking_id': bookingId,
+    });
+    var response = await post("home", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return homeModelFromJson(response.body.toString());
+    }
+  }
+
   /// API call to allUsers
   Future<AllUsersModel> getAllUsers(String authCode) async {
     final form = FormData({
@@ -265,6 +281,33 @@ class ApiController extends GetConnect {
       'auth_code': authCode,
       'email': email,
       'booking_id': bookingId,
+    });
+    var response = await post("invites", form);
+    if (!response.status.isOk) {
+      return Future.error("Something went wrong");
+    } else {
+      var data = response.body;
+      print(data.toString());
+      return statusMessageModelFromJson(response.body.toString());
+    }
+  }
+
+  /// API call to bookingSuccess
+  /// token_id,no_seats,amount,totalamount
+  Future<StatusMessageModel> bookingSuccess(
+      String authCode,
+      String bookingId,
+      String tokenId,
+      String noOfSeats,
+      String amount,
+      String totalAmount) async {
+    final form = FormData({
+      'auth_code': authCode,
+      'booking_id': bookingId,
+      'token_id': tokenId,
+      'no_seats': noOfSeats,
+      'amount': amount,
+      'totalamount': totalAmount,
     });
     var response = await post("invites", form);
     if (!response.status.isOk) {
