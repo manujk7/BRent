@@ -295,6 +295,7 @@ class SignUpPage extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            isExpanded: true,
                             items: _controller
                                 .statesModel()
                                 .state

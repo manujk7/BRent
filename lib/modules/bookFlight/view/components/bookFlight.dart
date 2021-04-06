@@ -14,6 +14,8 @@ class BookFlightPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Get.arguments != null) {
+      _controller.showLoader.value = false;
+      print(Get.arguments[0]);
       if (Get.arguments[0] == "1") {
         _controller.data.value = Get.arguments[1];
         _controllerHome.ticketAmount = int.parse(_controller.data().price);
