@@ -157,51 +157,75 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: spacing,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed("/invitePage",
-                                arguments:
-                                    _controller.homeModel().allFlight[index]);
-                          },
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              "Manage Invitees",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(
-                                    color: blue,
-                                    fontWeight: FontWeight.bold,
+                    _controller.homeModel().allFlight[index].type == "2"
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed("/invitePage",
+                                      arguments: _controller
+                                          .homeModel()
+                                          .allFlight[index]);
+                                },
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    "Manage Invitees",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(
+                                          color: blue,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            _controller.onLayoutCollapsed(
-                                _controller.expandFlag.value);
-                          },
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              "View Invitees",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(
-                                    color: blue,
-                                    fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _controller.onLayoutCollapsed(
+                                      _controller.expandFlag.value);
+                                },
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    "View Invitees",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(
+                                          color: blue,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
-                            ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {},
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    "Invited Flight",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(
+                                          color: blue,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                     SizedBox(
                       height: spacing,
                     ),

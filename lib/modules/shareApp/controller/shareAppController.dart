@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:brent/modules/profile/view/components/profile.dart';
 import 'package:brent/modules/shareApp/model/shareAppModel.dart';
 import 'package:brent/modules/signUp/model/statesModel.dart';
 import 'package:brent/services/apiController.dart';

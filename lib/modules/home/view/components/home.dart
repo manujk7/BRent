@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:brent/extras/constants.dart';
 import 'package:brent/modules/home/controller/homeController.dart';
+import 'package:brent/modules/home/controller/homePageController.dart';
 import 'package:brent/modules/home/view/components/create.dart';
 import 'package:brent/modules/home/view/components/homePage.dart';
 import 'package:brent/modules/home/view/components/inbox.dart';
@@ -22,6 +23,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final HomeController _controller = Get.find();
+  final HomePageController _controllerHomePage = Get.find();
 
   String pageTitle = "home";
   String deviceId = "123";
@@ -39,9 +41,14 @@ class _HomeState extends State<Home> {
         // var jj = json.decode(message.toString());
         var body = message['notification']['body'];
         var title = message['notification']['title'];
-        var bookingId = message['booking_id'];
+        String bookingId = "";
+        if (GetPlatform.isAndroid) {
+          bookingId = message['data']['booking_id'];
+        } else {
+          bookingId = message['booking_id'];
+        }
 
-        if(bookingId == null || bookingId == "null"){
+        if (bookingId == null || bookingId == "null") {
           bookingId = "";
         }
 
@@ -133,6 +140,7 @@ class _HomeState extends State<Home> {
                                   Navigator.of(context).pop();
                                   Get.toNamed('/bookFlightPage',
                                       arguments: ["2", bookingId]);
+                                  _controllerHomePage.hitHomeApi();
                                 },
                                 child: Container(
                                   height: 40,

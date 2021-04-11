@@ -42,6 +42,7 @@ class AllFlight {
     this.timeOfArrival,
     this.price,
     this.seats,
+    this.type,
     this.createdAt,
     this.updatedAt,
   });
@@ -57,6 +58,7 @@ class AllFlight {
   String timeOfArrival;
   String price;
   String seats;
+  String type;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -72,6 +74,7 @@ class AllFlight {
         timeOfArrival: json["time_of_arrival"],
         price: json["price"],
         seats: json["seats"],
+        type: json["type"].toString(),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
       );
